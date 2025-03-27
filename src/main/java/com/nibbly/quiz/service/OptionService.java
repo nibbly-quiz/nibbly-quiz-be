@@ -2,6 +2,8 @@ package com.nibbly.quiz.service;
 
 import com.nibbly.quiz.domain.Option;
 import com.nibbly.quiz.domain.OptionRepository;
+import com.nibbly.quiz.global.exception.ErrorCode;
+import com.nibbly.quiz.global.exception.NibblyQuizException;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -22,7 +24,7 @@ public class OptionService {
         boolean noAnswer = options.stream()
                 .noneMatch(Option::isAnswer);
         if (noAnswer) {
-            throw new IllegalArgumentException("정답이 없는 문제는 등록할 수 없습니다");
+            throw new NibblyQuizException(ErrorCode.NO_CORRECT_ANSWER);
         }
     }
 
@@ -32,7 +34,7 @@ public class OptionService {
                 .distinct()
                 .count() != options.size();
         if (hasDuplication) {
-            throw new IllegalArgumentException("선지 내용이 중복되는 문제는 등록할 수 없습니다");
+            throw new NibblyQuizException(ErrorCode.DUPLICATE_OPTIONS);
         }
     }
 }
