@@ -15,6 +15,7 @@ class QuestionTest {
     @Test
     void isBefore() {
         // given
+        //  변수명 수정
         Question question = new Question("인덱스에 대한 설명으로 올바르지 않은 것은?", LocalDate.now());
 
         // when & then
