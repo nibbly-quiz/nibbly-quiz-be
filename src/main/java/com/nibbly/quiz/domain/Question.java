@@ -35,4 +35,8 @@ public class Question {
     public Question(String text, LocalDate scheduleAt) {
         this(null, text, scheduleAt);
     }
+
+    public boolean isScheduledBefore(LocalDate date) {
+        return scheduleAt.isBefore(date);
+    }
 }
