@@ -31,4 +31,8 @@ public class Question {
         this.text = text;
         this.scheduleAt = scheduleAt;
     }
+
+    public Question(String text, LocalDate scheduleAt) {
+        this(null, text, scheduleAt);
+    }
 }

@@ -34,4 +34,8 @@ public class Option {
         this.text = text;
         this.isAnswer = isAnswer;
     }
+
+    public Option(Long questionId, String text, boolean isAnswer) {
+        this(null, questionId, text, isAnswer);
+    }
 }
