@@ -2,9 +2,11 @@ package com.nibbly.quiz.service;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 
+import com.nibbly.global.supports.DatabaseCleaner;
 import com.nibbly.quiz.Question;
 import com.nibbly.quiz.domain.QuestionRepository;
 import java.time.LocalDate;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +20,13 @@ class QuestionServiceTest {
     private QuestionService questionService;
     @Autowired
     private QuestionRepository questionRepository;
+    @Autowired
+    private DatabaseCleaner databaseCleaner;
+
+    @BeforeEach
+    void setUp() {
+        databaseCleaner.executeTruncate();
+    }
 
     @DisplayName("과거 일자에 대한 문제는 등록할 수 없다.")
     @Test

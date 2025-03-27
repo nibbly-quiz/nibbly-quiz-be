@@ -2,11 +2,13 @@ package com.nibbly.quiz.service;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 
+import com.nibbly.global.supports.DatabaseCleaner;
 import com.nibbly.quiz.Question;
 import com.nibbly.quiz.domain.Option;
 import com.nibbly.quiz.domain.OptionRepository;
 import java.time.LocalDate;
 import java.util.List;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +24,13 @@ class OptionServiceTest {
     private OptionService optionService;
     @Autowired
     private QuestionService questionService;
+    @Autowired
+    private DatabaseCleaner databaseCleaner;
+
+    @BeforeEach
+    void setUp() {
+        databaseCleaner.executeTruncate();
+    }
 
     @DisplayName("정답이 없는 선지 목록은 등록할 수 없다.")
     @Test
