@@ -6,6 +6,7 @@ import com.nibbly.global.supports.DatabaseCleaner;
 import com.nibbly.quiz.Question;
 import com.nibbly.quiz.domain.Option;
 import com.nibbly.quiz.domain.OptionRepository;
+import com.nibbly.quiz.global.exception.NibblyQuizException;
 import java.time.LocalDate;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
@@ -47,7 +48,7 @@ class OptionServiceTest {
 
         // when & then
         assertThatThrownBy(() -> optionService.saveOptions(noAnswerOptions))
-                .isInstanceOf(IllegalArgumentException.class);
+                .isInstanceOf(NibblyQuizException.class);
     }
 
     @DisplayName("선지 내용이 중복되는 문제는 등록할 수 없다.")
@@ -65,6 +66,6 @@ class OptionServiceTest {
 
         // when & then
         assertThatThrownBy(() -> optionService.saveOptions(duplicatedOptions))
-                .isInstanceOf(IllegalArgumentException.class);
+                .isInstanceOf(NibblyQuizException.class);
     }
 }

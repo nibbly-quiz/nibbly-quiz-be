@@ -10,7 +10,10 @@ public enum ErrorCode {
 
     INVALID_SCHEDULE_DATE("과거 일자에 대한 문제는 등록할 수 없습니다", HttpStatus.BAD_REQUEST),
     DUPLICATE_OPTIONS("선지 내용이 중복될 수 없습니다", HttpStatus.BAD_REQUEST),
-    NO_CORRECT_ANSWER("정답이 없는 문제는 등록할 수 없습니다", HttpStatus.BAD_REQUEST);
+    NO_CORRECT_ANSWER("정답이 없는 문제는 등록할 수 없습니다", HttpStatus.BAD_REQUEST),
+
+    INTERNAL_SERVER_ERROR("서버 내부 오류가 발생하였습니다", HttpStatus.INTERNAL_SERVER_ERROR),
+    ;
 
     private final String message;
     private final HttpStatus httpStatus;

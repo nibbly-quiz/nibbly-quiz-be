@@ -5,6 +5,7 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 import com.nibbly.global.supports.DatabaseCleaner;
 import com.nibbly.quiz.Question;
 import com.nibbly.quiz.domain.QuestionRepository;
+import com.nibbly.quiz.global.exception.NibblyQuizException;
 import java.time.LocalDate;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -36,6 +37,6 @@ class QuestionServiceTest {
 
         // when & then
         assertThatThrownBy(() -> questionService.saveQuestion(question))
-                .isInstanceOf(IllegalArgumentException.class);
+                .isInstanceOf(NibblyQuizException.class);
     }
 }
