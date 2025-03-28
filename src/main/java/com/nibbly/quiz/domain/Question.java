@@ -20,7 +20,7 @@ public class Question {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
+    @Column(columnDefinition = "VARCHAR(500)", nullable = false)
     private String text;
 
     @Column(nullable = false)

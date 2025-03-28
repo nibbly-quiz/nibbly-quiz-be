@@ -22,7 +22,7 @@ public class Option {
     @Column(nullable = false)
     private Long questionId;
 
-    @Column(nullable = false)
+    @Column(columnDefinition = "VARCHAR(100)", nullable = false)
     private String text;
 
     @Column(nullable = false)
