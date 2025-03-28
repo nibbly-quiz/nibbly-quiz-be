@@ -23,20 +23,27 @@ public class OptionService {
     }
 
     private void validateHasAnswer(List<Option> options) {
-        boolean noAnswer = options.stream()
-                .noneMatch(Option::isAnswer);
-        if (noAnswer) {
+        if (hasNoAnswer(options)) {
             throw new NibblyQuizException(ErrorCode.NO_CORRECT_ANSWER);
         }
     }
 
+    private boolean hasNoAnswer(List<Option> options) {
+        return options.stream()
+                .noneMatch(Option::isAnswer);
+    }
+
     private void validateNoDuplication(List<Option> options) {
-        boolean hasDuplication = options.stream()
-                .map(Option::getText)
-                .distinct()
-                .count() != options.size();
-        if (hasDuplication) {
+        if (isDuplicated(options)) {
             throw new NibblyQuizException(ErrorCode.DUPLICATE_OPTIONS);
         }
+    }
+
+    private boolean isDuplicated(List<Option> options) {
+        return options.stream()
+                .map(Option::getText)
+                .map(text -> text.replaceAll("\\s", "").toLowerCase())
+                .distinct()
+                .count() != options.size();
     }
 }
