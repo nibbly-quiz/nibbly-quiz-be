@@ -41,18 +41,16 @@ class OptionsTest {
                 .isInstanceOf(NibblyQuizException.class);
     }
 
-    @DisplayName("선지 내용이 중복되는 문제는 등록할 수 없다.")
+    @DisplayName("선지 내용이 중복되는 문제는 등록할 수 없다. - 공백, 대소문자 무시")
     @Test
     void should_throw_exception_when_question_has_duplicate_options() {
         // given
         Long questionId = 1L;
-        Option option1 = new Option(questionId, "중복", false);
-        Option option2 = new Option(questionId, "중복", false);
-        Option option3 = new Option(questionId, "중복", false);
-        Option option4 = new Option(questionId, "중복", true);
+        Option option1 = new Option(questionId, "duplicate", false);
+        Option option2 = new Option(questionId, "Dup liCa te", true);
 
         // when & then
-        assertThatThrownBy(() -> new Options(List.of(option1, option2, option3, option4)))
+        assertThatThrownBy(() -> new Options(List.of(option1, option2)))
                 .isInstanceOf(NibblyQuizException.class);
     }
 }
