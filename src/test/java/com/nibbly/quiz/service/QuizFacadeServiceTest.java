@@ -37,7 +37,7 @@ class QuizFacadeServiceTest {
 
     @DisplayName("퀴즈를 생성할 수 있다.")
     @Test
-    void createQuiz() {
+    void should_enroll_quiz_when_requested() {
         // given
         QuestionCreateRequest questionCreateRequest = new QuestionCreateRequest("인덱스에 대한 설명으로 바르지 않은 것은?",
                 LocalDate.now().plusDays(1));

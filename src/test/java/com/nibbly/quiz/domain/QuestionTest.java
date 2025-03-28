@@ -13,7 +13,7 @@ class QuestionTest {
 
     @DisplayName("문제 출제일이 특정 날짜 이전인지 확인할 수 있다.")
     @Test
-    void isBefore() {
+    void should_return_true_when_question_is_scheduled_before_target() {
         // given
         Question question = new Question("인덱스에 대한 설명으로 올바르지 않은 것은?", LocalDate.now());
 
