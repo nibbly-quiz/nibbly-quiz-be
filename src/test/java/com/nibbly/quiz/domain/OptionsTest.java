@@ -38,7 +38,8 @@ class OptionsTest {
 
         // when & then
         assertThatThrownBy(() -> new Options(List.of(option1, option2, option3, option4)))
-                .isInstanceOf(NibblyQuizException.class);
+                .isInstanceOf(NibblyQuizException.class)
+                .hasMessage("정답이 없는 문제는 등록할 수 없습니다");
     }
 
     @DisplayName("선지 내용이 중복되는 문제는 등록할 수 없다. - 공백, 대소문자 무시")
@@ -51,6 +52,7 @@ class OptionsTest {
 
         // when & then
         assertThatThrownBy(() -> new Options(List.of(option1, option2)))
-                .isInstanceOf(NibblyQuizException.class);
+                .isInstanceOf(NibblyQuizException.class)
+                .hasMessage("선지 내용이 중복될 수 없습니다");
     }
 }

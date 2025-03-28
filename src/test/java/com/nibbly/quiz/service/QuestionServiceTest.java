@@ -49,6 +49,7 @@ class QuestionServiceTest {
 
         // when & then
         assertThatThrownBy(() -> questionService.saveQuestion(question))
-                .isInstanceOf(NibblyQuizException.class);
+                .isInstanceOf(NibblyQuizException.class)
+                .hasMessage("과거 일자에 대한 문제는 등록할 수 없습니다");
     }
 }
