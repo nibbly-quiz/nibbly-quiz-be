@@ -1,7 +1,7 @@
 package com.nibbly.quiz.dto;
 
 import com.nibbly.quiz.Question;
-import com.nibbly.quiz.domain.Option;
+import com.nibbly.quiz.domain.Options;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -20,9 +20,9 @@ public record QuizCreateRequest(
         return questionRequest.toEntity();
     }
 
-    public List<Option> getOptions(Long questionId) {
-        return optionCreateRequests.stream()
+    public Options getOptions(Long questionId) {
+        return new Options(optionCreateRequests.stream()
                 .map(optionCreateRequest -> optionCreateRequest.toEntity(questionId))
-                .toList();
+                .toList());
     }
 }
