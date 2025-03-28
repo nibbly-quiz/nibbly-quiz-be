@@ -1,5 +1,6 @@
 package com.nibbly.quiz.service;
 
+import static org.assertj.core.api.Assertions.assertThatCode;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 
 import com.nibbly.global.supports.DatabaseCleaner;
@@ -27,6 +28,17 @@ class QuestionServiceTest {
     @BeforeEach
     void setUp() {
         databaseCleaner.executeTruncate();
+    }
+
+    @DisplayName("문제를 등록할 수 있다.")
+    @Test
+    void should_create_question() {
+        // given
+        Question question = new Question("정상적인 문제", LocalDate.now().plusDays(1));
+
+        // when & then
+        assertThatCode(() -> questionService.saveQuestion(question))
+                .doesNotThrowAnyException();
     }
 
     @DisplayName("과거 일자에 대한 문제는 등록할 수 없다.")
