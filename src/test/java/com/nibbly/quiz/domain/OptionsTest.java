@@ -55,4 +55,21 @@ class OptionsTest {
                 .isInstanceOf(NibblyQuizException.class)
                 .hasMessage("선지 내용이 중복될 수 없습니다");
     }
+
+    @DisplayName("선지 리스트 원본을 수정하려고 하는 경우 예외가 발생한다")
+    @Test
+    void should_throw_exception_when_trying_to_modify_option_list() {
+        // given
+        Long questionId = 1L;
+        Option option1 = new Option(questionId, "오답1", false);
+        Option option2 = new Option(questionId, "오답2", false);
+        Option option3 = new Option(questionId, "오답3", false);
+        Option option4 = new Option(questionId, "정답", true);
+        Options options = new Options(List.of(option1, option2, option3, option4));
+        List<Option> optionList = options.getOptionList();
+
+        // when & then
+        assertThatThrownBy(() -> optionList.add(new Option(questionId, "오답4", false)))
+                .isInstanceOf(UnsupportedOperationException.class);
+    }
 }
