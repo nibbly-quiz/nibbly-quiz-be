@@ -15,6 +15,7 @@ public enum ErrorCode {
     INVALID_QUESTION_LENGTH("문제 내용은 500자를 넘을 수 없습니다", HttpStatus.BAD_REQUEST),
 
     INTERNAL_SERVER_ERROR("서버 내부 오류가 발생하였습니다", HttpStatus.INTERNAL_SERVER_ERROR),
+    INVALID_OPTION_SIZE("선지는 2개 이상 10개 이하로 등록해야 합니다", HttpStatus.BAD_REQUEST),
     ;
 
     private final String message;

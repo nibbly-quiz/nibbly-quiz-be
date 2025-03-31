@@ -7,11 +7,15 @@ import java.util.List;
 
 public class Options {
 
+    private static final int MIN_SIZE = 2;
+    private static final int MAX_SIZE = 10;
+
     private final List<Option> options;
 
     public Options(List<Option> options) {
         validateHasAnswer(options);
         validateNoDuplication(options);
+        validateSize(options);
         this.options = options;
     }
 
@@ -38,6 +42,12 @@ public class Options {
                 .map(text -> text.replaceAll("\\s", "").toLowerCase())
                 .distinct()
                 .count() != options.size();
+    }
+
+    private void validateSize(List<Option> options) {
+        if (options.size() < MIN_SIZE || options.size() > MAX_SIZE) {
+            throw new NibblyQuizException(ErrorCode.INVALID_OPTION_SIZE);
+        }
     }
 
     public List<Option> getOptionList() {

@@ -72,4 +72,44 @@ class OptionsTest {
         assertThatThrownBy(() -> optionList.add(new Option(questionId, "오답4", false)))
                 .isInstanceOf(UnsupportedOperationException.class);
     }
+
+    @DisplayName("선지 리스트의 크기가 2 미만이면 예외가 발생한다")
+    @Test
+    void should_throw_exception_when_option_size_is_less_than_2() {
+        // given
+        Long questionId = 1L;
+        Option option1 = new Option(questionId, "오답1", true);
+
+        // when & then
+        assertThatThrownBy(() -> new Options(List.of(option1)))
+                .isInstanceOf(NibblyQuizException.class)
+                .hasMessage("선지는 2개 이상 10개 이하로 등록해야 합니다");
+    }
+
+    @DisplayName("선지 리스트의 크기가 10 초과이면 예외가 발생한다")
+    @Test
+    void should_throw_exception_when_option_size_is_more_than_10() {
+        // given
+        Long questionId = 1L;
+        Option option1 = new Option(questionId, "오답1", false);
+        Option option2 = new Option(questionId, "오답2", false);
+        Option option3 = new Option(questionId, "오답3", false);
+        Option option4 = new Option(questionId, "오답4", false);
+        Option option5 = new Option(questionId, "오답5", false);
+        Option option6 = new Option(questionId, "오답6", false);
+        Option option7 = new Option(questionId, "오답7", false);
+        Option option8 = new Option(questionId, "오답8", false);
+        Option option9 = new Option(questionId, "오답9", false);
+        Option option10 = new Option(questionId, "오답10", false);
+        Option option11 = new Option(questionId, "정답", true);
+
+        // when & then
+        assertThatThrownBy(() -> new Options(
+                List.of(option1, option2, option3, option4,
+                        option5, option6, option7, option8,
+                        option9, option10, option11)
+        ))
+                .isInstanceOf(NibblyQuizException.class)
+                .hasMessage("선지는 2개 이상 10개 이하로 등록해야 합니다");
+    }
 }
