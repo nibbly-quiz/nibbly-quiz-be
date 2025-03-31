@@ -1,6 +1,6 @@
 package com.nibbly.quiz.presentation;
 
-import com.nibbly.quiz.dto.QuizCreateRequest;
+import com.nibbly.quiz.dto.request.QuizCreateRequest;
 import com.nibbly.quiz.service.QuizFacadeService;
 import jakarta.validation.Valid;
 import java.net.URI;

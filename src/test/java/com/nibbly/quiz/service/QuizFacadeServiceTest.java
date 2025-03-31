@@ -3,9 +3,9 @@ package com.nibbly.quiz.service;
 import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
 
 import com.nibbly.global.supports.DatabaseCleaner;
-import com.nibbly.quiz.dto.OptionCreateRequest;
-import com.nibbly.quiz.dto.QuestionCreateRequest;
-import com.nibbly.quiz.dto.QuizCreateRequest;
+import com.nibbly.quiz.dto.request.OptionCreateRequest;
+import com.nibbly.quiz.dto.request.QuestionCreateRequest;
+import com.nibbly.quiz.dto.request.QuizCreateRequest;
 import com.nibbly.quiz.repository.OptionRepository;
 import com.nibbly.quiz.repository.QuestionRepository;
 import java.time.LocalDate;

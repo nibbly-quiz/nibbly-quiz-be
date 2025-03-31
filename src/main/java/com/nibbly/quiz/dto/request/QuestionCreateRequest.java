@@ -1,4 +1,4 @@
-package com.nibbly.quiz.dto;
+package com.nibbly.quiz.dto.request;
 
 import com.nibbly.quiz.Question;
 import jakarta.validation.constraints.NotBlank;

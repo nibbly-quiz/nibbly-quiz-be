@@ -1,9 +1,9 @@
 package com.nibbly.quiz.presentation;
 
 import com.nibbly.global.supports.DatabaseCleaner;
-import com.nibbly.quiz.dto.OptionCreateRequest;
-import com.nibbly.quiz.dto.QuestionCreateRequest;
-import com.nibbly.quiz.dto.QuizCreateRequest;
+import com.nibbly.quiz.dto.request.OptionCreateRequest;
+import com.nibbly.quiz.dto.request.QuestionCreateRequest;
+import com.nibbly.quiz.dto.request.QuizCreateRequest;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 import java.time.LocalDate;

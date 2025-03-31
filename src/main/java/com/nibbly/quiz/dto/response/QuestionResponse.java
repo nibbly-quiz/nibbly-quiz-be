@@ -1,4 +1,4 @@
-package com.nibbly.quiz.dto;
+package com.nibbly.quiz.dto.response;
 
 import com.nibbly.quiz.Question;
 
