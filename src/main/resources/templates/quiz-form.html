@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>퀴즈 등록</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 2rem;
+            max-width: 600px;
+            margin: auto;
+            background-color: #f9f9f9;
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+
+        .form-group {
+            margin-bottom: 1.2rem;
+        }
+
+        input[type="text"],
+        textarea,
+        input[type="date"] {
+            width: 100%;
+            padding: 0.5rem;
+            margin-top: 0.3rem;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        .options-container {
+            margin-top: 1rem;
+            background: #fff;
+            padding: 1rem;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+
+        .option-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 0.8rem;
+        }
+
+        .option-item input[type="text"] {
+            flex-grow: 1;
+        }
+
+        .checkbox-inline {
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+            white-space: nowrap;
+        }
+
+        .add-option,
+        .remove-option {
+            background: #007BFF;
+            color: white;
+            border: none;
+            padding: 0.3rem 0.6rem;
+            font-size: 0.85rem;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .remove-option {
+            background: #dc3545;
+        }
+
+        .add-option:hover {
+            background: #0056b3;
+        }
+
+        .remove-option:hover {
+            background: #c82333;
+        }
+
+        button.submit {
+            background: #28a745;
+            color: white;
+            padding: 0.6rem 1.2rem;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            display: block;
+            margin-top: 2rem;
+            width: 100%;
+        }
+
+        button.submit:hover {
+            background: #218838;
+        }
+    </style>
+</head>
+<body>
+
+<h1>퀴즈 등록</h1>
+
+<div class="form-group">
+    <label for="text">문제 내용</label>
+    <textarea id="text" rows="4" required></textarea>
+</div>
+
+<div class="form-group">
+    <label for="scheduleAt">출제 날짜</label>
+    <input type="date" id="scheduleAt" required/>
+</div>
+
+<div class="form-group options-container">
+    <label>선지</label>
+    <div id="options-wrapper">
+        <div class="option-item">
+            <input type="text" placeholder="선지 내용" required/>
+            <label class="checkbox-inline">
+                <input type="checkbox"/>
+                정답
+            </label>
+            <button type="button" class="remove-option" onclick="removeOption(this)">–</button>
+        </div>
+    </div>
+    <button type="button" class="add-option" onclick="addOption()">+ 선지 추가</button>
+</div>
+
+<button type="button" class="submit" onclick="submitQuiz()">등록하기</button>
+
+<script>
+    function addOption() {
+        const wrapper = document.getElementById("options-wrapper");
+
+        const div = document.createElement("div");
+        div.className = "option-item";
+
+        div.innerHTML = `
+            <input type="text" placeholder="선지 내용" required/>
+            <label class="checkbox-inline">
+                <input type="checkbox" />
+                정답
+            </label>
+            <button type="button" class="remove-option" onclick="removeOption(this)">–</button>
+        `;
+
+        wrapper.appendChild(div);
+    }
+
+    function removeOption(button) {
+        const wrapper = document.getElementById("options-wrapper");
+        if (wrapper.childElementCount > 1) {
+            wrapper.removeChild(button.parentElement);
+        }
+    }
+
+    function submitQuiz() {
+        const text = document.getElementById("text").value;
+        const scheduleAt = document.getElementById("scheduleAt").value;
+
+        const optionElements = document.querySelectorAll("#options-wrapper .option-item");
+
+        const options = Array.from(optionElements).map(item => {
+            const textInput = item.querySelector("input[type='text']");
+            const checkbox = item.querySelector("input[type='checkbox']");
+
+            return {
+                option: textInput.value,
+                isAnswer: checkbox.checked
+            };
+        });
+
+        const payload = {
+            questionRequest: {
+                text: text,
+                scheduleAt: scheduleAt
+            },
+            optionCreateRequests: options
+        };
+
+        console.log("전송될 JSON:", JSON.stringify(payload, null, 2));
+
+        fetch("/quizzes", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(payload)
+        })
+            .then(res => {
+                if (res.ok) {
+                    alert("퀴즈가 등록되었습니다!");
+                    window.location.href = "/";
+                } else {
+                    return res.json().then(err => {
+                        alert(err.message);
+                    });
+                }
+            })
+            .catch(err => {
+                console.error("요청 실패", err);
+                alert("요청 중 오류가 발생했습니다.");
+            });
+    }
+</script>
+
+</body>
+</html>
