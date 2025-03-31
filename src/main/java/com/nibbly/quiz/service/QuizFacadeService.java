@@ -1,6 +1,7 @@
 package com.nibbly.quiz.service;
 
-import com.nibbly.quiz.dto.QuizCreateRequest;
+import com.nibbly.quiz.dto.request.QuizCreateRequest;
+import com.nibbly.quiz.dto.response.TodayQuestionsResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,5 +18,10 @@ public class QuizFacadeService {
         Long questionId = questionService.saveQuestion(request.getQuestion());
         optionService.saveOptions(request.getOptions(questionId));
         return questionId;
+    }
+
+    @Transactional(readOnly = true)
+    public TodayQuestionsResponse getQuestionsScheduledToday() {
+        return new TodayQuestionsResponse(questionService.readQuestionIdsScheduledToday());
     }
 }

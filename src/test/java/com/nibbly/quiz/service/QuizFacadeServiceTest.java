@@ -60,4 +60,32 @@ class QuizFacadeServiceTest {
                 () -> assertThat(optionRepository.findAll()).hasSize(4)
         );
     }
+
+    @DisplayName("오늘 출제될 문제의 ID 목록을 조회할 수 있다.")
+    @Test
+    void should_find_question_ids_scheduled_today() {
+        // given
+        QuestionCreateRequest questionCreateRequest1 = new QuestionCreateRequest("오늘 출제될 문제1", LocalDate.now());
+        QuestionCreateRequest questionCreateRequest2 = new QuestionCreateRequest("오늘 출제될 문제2", LocalDate.now());
+        QuestionCreateRequest questionCreateRequest3 = new QuestionCreateRequest("내일 출제될 문제",
+                LocalDate.now().plusDays(1));
+
+        List<OptionCreateRequest> optionsCreateRequest = List.of(
+                new OptionCreateRequest("정답", true),
+                new OptionCreateRequest("오답", false)
+        );
+        QuizCreateRequest request1 = new QuizCreateRequest(questionCreateRequest1, optionsCreateRequest);
+        QuizCreateRequest request2 = new QuizCreateRequest(questionCreateRequest2, optionsCreateRequest);
+        QuizCreateRequest request3 = new QuizCreateRequest(questionCreateRequest3, optionsCreateRequest);
+
+        quizFacadeService.saveQuiz(request1);
+        quizFacadeService.saveQuiz(request2);
+        quizFacadeService.saveQuiz(request3);
+
+        // when
+        List<Long> questionIdsScheduledToday = quizFacadeService.getQuestionsScheduledToday().quizIds();
+
+        // then
+        assertThat(questionIdsScheduledToday).hasSize(2);
+    }
 }

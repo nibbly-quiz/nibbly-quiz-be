@@ -5,6 +5,7 @@ import com.nibbly.global.exception.NibblyQuizException;
 import com.nibbly.quiz.Question;
 import com.nibbly.quiz.repository.QuestionRepository;
 import java.time.LocalDate;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,5 +26,10 @@ public class QuestionService {
         if (question.isScheduledBefore(LocalDate.now())) {
             throw new NibblyQuizException(ErrorCode.INVALID_SCHEDULE_DATE);
         }
+    }
+
+    @Transactional(readOnly = true)
+    public List<Long> readQuestionIdsScheduledToday() {
+        return questionRepository.findByScheduledAt(LocalDate.now());
     }
 }

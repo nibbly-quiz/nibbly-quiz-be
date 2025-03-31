@@ -1,5 +1,7 @@
 package com.nibbly.quiz.presentation;
 
+import static org.hamcrest.Matchers.hasItem;
+
 import com.nibbly.global.supports.DatabaseCleaner;
 import com.nibbly.quiz.dto.request.OptionCreateRequest;
 import com.nibbly.quiz.dto.request.QuestionCreateRequest;
@@ -57,5 +59,36 @@ class QuizControllerTest {
                 .when().post("/quizzes")
                 .then().log().all()
                 .statusCode(201);
+    }
+
+    @DisplayName("오늘의 퀴즈 목록을 조회할 수 있다")
+    @Test
+    void should_find_today_quiz_list() {
+        // given
+        QuizCreateRequest request = new QuizCreateRequest(
+                new QuestionCreateRequest("오늘의 문제", LocalDate.now()),
+                List.of(
+                        new OptionCreateRequest("정답", true),
+                        new OptionCreateRequest("오답", false)
+                )
+        );
+
+        // when
+        String locationHeader = RestAssured.given().log().all()
+                .contentType(ContentType.JSON)
+                .body(request)
+                .when().post("/quizzes")
+                .then().log().all()
+                .statusCode(201)
+                .extract()
+                .header("Location");
+        Long quizId = Long.parseLong(locationHeader.substring(locationHeader.lastIndexOf("/") + 1));
+
+        // then
+        RestAssured.given().log().all()
+                .when().get("/quizzes/today")
+                .then().log().all()
+                .statusCode(200)
+                .body("quizIds", hasItem(quizId.intValue()));
     }
 }
