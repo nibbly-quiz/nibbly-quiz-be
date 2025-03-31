@@ -1,4 +1,4 @@
-package com.nibbly.quiz.global.exception;
+package com.nibbly.global.exception;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

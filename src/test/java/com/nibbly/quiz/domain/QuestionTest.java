@@ -3,8 +3,8 @@ package com.nibbly.quiz.domain;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatCode;
 
+import com.nibbly.global.exception.NibblyQuizException;
 import com.nibbly.quiz.Question;
-import com.nibbly.quiz.global.exception.NibblyQuizException;
 import java.time.LocalDate;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;

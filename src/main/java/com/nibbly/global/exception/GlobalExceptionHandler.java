@@ -1,4 +1,4 @@
-package com.nibbly.quiz.global.exception;
+package com.nibbly.global.exception;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;

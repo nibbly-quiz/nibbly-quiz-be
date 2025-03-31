@@ -1,8 +1,8 @@
 package com.nibbly.quiz.domain;
 
 
-import com.nibbly.quiz.global.exception.ErrorCode;
-import com.nibbly.quiz.global.exception.NibblyQuizException;
+import com.nibbly.global.exception.ErrorCode;
+import com.nibbly.global.exception.NibblyQuizException;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
