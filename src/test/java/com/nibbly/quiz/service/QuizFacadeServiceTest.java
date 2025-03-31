@@ -3,11 +3,11 @@ package com.nibbly.quiz.service;
 import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
 
 import com.nibbly.global.supports.DatabaseCleaner;
-import com.nibbly.quiz.domain.OptionRepository;
-import com.nibbly.quiz.domain.QuestionRepository;
 import com.nibbly.quiz.dto.OptionCreateRequest;
 import com.nibbly.quiz.dto.QuestionCreateRequest;
 import com.nibbly.quiz.dto.QuizCreateRequest;
+import com.nibbly.quiz.repository.OptionRepository;
+import com.nibbly.quiz.repository.QuestionRepository;
 import java.time.LocalDate;
 import java.util.List;
 import org.junit.jupiter.api.Assertions;

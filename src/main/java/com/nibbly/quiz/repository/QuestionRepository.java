@@ -1,4 +1,4 @@
-package com.nibbly.quiz.domain;
+package com.nibbly.quiz.repository;
 
 import com.nibbly.quiz.Question;
 import org.springframework.data.jpa.repository.JpaRepository;

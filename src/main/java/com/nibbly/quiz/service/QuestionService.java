@@ -3,7 +3,7 @@ package com.nibbly.quiz.service;
 import com.nibbly.global.exception.ErrorCode;
 import com.nibbly.global.exception.NibblyQuizException;
 import com.nibbly.quiz.Question;
-import com.nibbly.quiz.domain.QuestionRepository;
+import com.nibbly.quiz.repository.QuestionRepository;
 import java.time.LocalDate;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

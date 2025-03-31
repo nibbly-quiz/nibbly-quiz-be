@@ -1,5 +1,6 @@
-package com.nibbly.quiz.domain;
+package com.nibbly.quiz.repository;
 
+import com.nibbly.quiz.domain.Option;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

@@ -6,7 +6,7 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 import com.nibbly.global.exception.NibblyQuizException;
 import com.nibbly.global.supports.DatabaseCleaner;
 import com.nibbly.quiz.Question;
-import com.nibbly.quiz.domain.QuestionRepository;
+import com.nibbly.quiz.repository.QuestionRepository;
 import java.time.LocalDate;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
