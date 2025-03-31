@@ -6,6 +6,7 @@ import com.nibbly.global.supports.DatabaseCleaner;
 import com.nibbly.quiz.dto.request.OptionCreateRequest;
 import com.nibbly.quiz.dto.request.QuestionCreateRequest;
 import com.nibbly.quiz.dto.request.QuizCreateRequest;
+import com.nibbly.quiz.dto.response.QuizResponse;
 import com.nibbly.quiz.repository.OptionRepository;
 import com.nibbly.quiz.repository.QuestionRepository;
 import java.time.LocalDate;
@@ -87,5 +88,24 @@ class QuizFacadeServiceTest {
 
         // then
         assertThat(questionIdsScheduledToday).hasSize(2);
+    }
+
+    @DisplayName("ID를 기반으로 퀴즈를 조회할 수 있다.")
+    @Test
+    void should_find_quiz_by_id() {
+        // given
+        QuestionCreateRequest questionCreateRequest = new QuestionCreateRequest("문제", LocalDate.now());
+        OptionCreateRequest optionCreateRequest1 = new OptionCreateRequest("정답", true);
+        OptionCreateRequest optionCreateRequest2 = new OptionCreateRequest("오답", false);
+        QuizCreateRequest request = new QuizCreateRequest(questionCreateRequest,
+                List.of(optionCreateRequest1, optionCreateRequest2));
+
+        Long quizId = quizFacadeService.saveQuiz(request);
+
+        // when
+        QuizResponse quiz = quizFacadeService.getQuiz(quizId);
+
+        // then
+        assertThat(quiz.question().text()).isEqualTo("문제");
     }
 }

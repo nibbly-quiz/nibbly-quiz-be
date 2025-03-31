@@ -91,4 +91,35 @@ class QuizControllerTest {
                 .statusCode(200)
                 .body("quizIds", hasItem(quizId.intValue()));
     }
+
+    @DisplayName("ID를 통해 퀴즈를 조회할 수 있다.")
+    @Test
+    void should_find_quiz_by_id() {
+        // given
+        QuizCreateRequest request = new QuizCreateRequest(
+                new QuestionCreateRequest("오늘의 문제", LocalDate.now()),
+                List.of(
+                        new OptionCreateRequest("정답", true),
+                        new OptionCreateRequest("오답", false)
+                )
+        );
+
+        // when
+        String locationHeader = RestAssured.given().log().all()
+                .contentType(ContentType.JSON)
+                .body(request)
+                .when().post("/quizzes")
+                .then().log().all()
+                .statusCode(201)
+                .extract()
+                .header("Location");
+        Long quizId = Long.parseLong(locationHeader.substring(locationHeader.lastIndexOf("/") + 1));
+
+        // then
+        RestAssured.given().log().all()
+                .when().get("/quizzes/" + quizId)
+                .then().log().all()
+                .statusCode(200)
+                .body("question.text", org.hamcrest.Matchers.equalTo("오늘의 문제"));
+    }
 }
