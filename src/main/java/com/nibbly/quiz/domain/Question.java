@@ -28,13 +28,13 @@ public class Question {
     private String text;
 
     @Column(nullable = false)
-    private LocalDate scheduleAt;
+    private LocalDate scheduledAt;
 
-    public Question(Long id, String text, LocalDate scheduleAt) {
+    public Question(Long id, String text, LocalDate scheduledAt) {
         validateTextLength(text);
         this.id = id;
         this.text = text;
-        this.scheduleAt = scheduleAt;
+        this.scheduledAt = scheduledAt;
     }
 
     private void validateTextLength(String text) {
@@ -43,11 +43,11 @@ public class Question {
         }
     }
 
-    public Question(String text, LocalDate scheduleAt) {
-        this(null, text, scheduleAt);
+    public Question(String text, LocalDate scheduledAt) {
+        this(null, text, scheduledAt);
     }
 
     public boolean isScheduledBefore(LocalDate date) {
-        return scheduleAt.isBefore(date);
+        return scheduledAt.isBefore(date);
     }
 }
