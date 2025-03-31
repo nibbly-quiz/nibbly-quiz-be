@@ -32,4 +32,10 @@ public class QuestionService {
     public List<Long> readQuestionIdsScheduledToday() {
         return questionRepository.findByScheduledAt(LocalDate.now());
     }
+
+    @Transactional(readOnly = true)
+    public Question readQuestion(Long questionId) {
+        return questionRepository.findById(questionId)
+                .orElseThrow(() -> new NibblyQuizException(ErrorCode.QUESTION_NOT_FOUND));
+    }
 }

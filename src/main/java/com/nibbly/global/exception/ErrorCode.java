@@ -16,6 +16,7 @@ public enum ErrorCode {
 
     INTERNAL_SERVER_ERROR("서버 내부 오류가 발생하였습니다", HttpStatus.INTERNAL_SERVER_ERROR),
     INVALID_OPTION_SIZE("선지는 2개 이상 10개 이하로 등록해야 합니다", HttpStatus.BAD_REQUEST),
+    QUESTION_NOT_FOUND("문제를 찾을 수 없습니다", HttpStatus.NOT_FOUND),
     ;
 
     private final String message;
