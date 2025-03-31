@@ -72,4 +72,31 @@ class QuestionServiceTest {
         // then
         assertThat(questionIds).containsExactlyInAnyOrder(question1.getId(), question2.getId());
     }
+
+    @DisplayName("문제 ID로 문제를 조회할 수 있다.")
+    @Test
+    void should_find_question_by_id() {
+        // given
+        Question question = new Question("문제", LocalDate.now());
+        Long questionId = questionRepository.save(question).getId();
+
+        // when
+        Question found = questionService.readQuestion(questionId);
+
+        // then
+        assertThatCode(() -> questionService.readQuestion(questionId))
+                .doesNotThrowAnyException();
+    }
+
+    @DisplayName("존재하지 않는 문제 ID로 문제를 조회하면 예외가 발생한다.")
+    @Test
+    void should_throw_exception_when_question_not_found() {
+        // given
+        Long questionId = 1L;
+
+        // when & then
+        assertThatThrownBy(() -> questionService.readQuestion(questionId))
+                .isInstanceOf(NibblyQuizException.class)
+                .hasMessage("문제를 찾을 수 없습니다");
+    }
 }
