@@ -1,5 +1,7 @@
 package com.nibbly.quiz;
 
+import com.nibbly.quiz.global.exception.ErrorCode;
+import com.nibbly.quiz.global.exception.NibblyQuizException;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -16,6 +18,8 @@ import lombok.NoArgsConstructor;
 @Entity
 public class Question {
 
+    private static final int MAX_TEXT_LENGTH = 500;
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -27,9 +31,16 @@ public class Question {
     private LocalDate scheduleAt;
 
     public Question(Long id, String text, LocalDate scheduleAt) {
+        validateTextLength(text);
         this.id = id;
         this.text = text;
         this.scheduleAt = scheduleAt;
+    }
+
+    private void validateTextLength(String text) {
+        if (text.length() > MAX_TEXT_LENGTH) {
+            throw new NibblyQuizException(ErrorCode.INVALID_QUESTION_LENGTH);
+        }
     }
 
     public Question(String text, LocalDate scheduleAt) {
