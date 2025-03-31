@@ -16,4 +16,9 @@ public class OptionService {
     public void saveOptions(Options options) {
         optionRepository.saveAll(options.getOptionList());
     }
+
+    @Transactional(readOnly = true)
+    public Options readOptions(Long questionId) {
+        return new Options(optionRepository.findByQuestionId(questionId));
+    }
 }
