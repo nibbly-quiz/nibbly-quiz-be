@@ -1,6 +1,7 @@
 package com.nibbly.quiz.service;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatCode;
+import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
 
 import com.nibbly.global.supports.DatabaseCleaner;
 import com.nibbly.quiz.Question;
@@ -45,5 +46,22 @@ class OptionServiceTest {
         // when & then
         assertThatCode(() -> optionService.saveOptions(options))
                 .doesNotThrowAnyException();
+    }
+
+    @DisplayName("문제 ID로 옵션을 조회할 수 있다.")
+    @Test
+    void should_find_option_by_question_id() {
+        // given
+        Long questionId = questionService.saveQuestion(new Question("문제", LocalDate.now()));
+        Option option1 = new Option(questionId, "정답", true);
+        Option option2 = new Option(questionId, "오답", false);
+        Options options = new Options(List.of(option1, option2));
+        optionService.saveOptions(options);
+
+        // when
+        Options found = optionService.readOptions(questionId);
+
+        // then
+        assertThat(found.getOptionList()).hasSize(2);
     }
 }
