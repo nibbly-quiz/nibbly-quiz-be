@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>오늘의 퀴즈</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            padding: 2rem;
+            background-color: #f9f9f9;
+        }
+
+        .sidebar {
+            width: 80px;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            margin-right: 1rem;
+        }
+
+        .sidebar button {
+            padding: 0.5rem;
+            border: 1px solid #ccc;
+            background: white;
+            cursor: pointer;
+            border-radius: 4px;
+            position: relative;
+        }
+
+        .sidebar button.active {
+            background: #007BFF;
+            color: white;
+        }
+
+        .sidebar button.answered::after {
+            content: "✔";
+            position: absolute;
+            right: 6px;
+            top: 2px;
+            font-size: 0.8rem;
+            color: green;
+        }
+
+        .main-container {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+        }
+
+        .top-bar {
+            display: flex;
+            justify-content: flex-end;
+            margin-bottom: 1rem;
+        }
+
+        .submit-button {
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            padding: 0.6rem 1.2rem;
+            cursor: pointer;
+        }
+
+        .quiz-box {
+            background: white;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-direction: column;
+            min-height: 400px;
+        }
+
+        .quiz-header {
+            font-size: 1.2rem;
+            font-weight: bold;
+            margin-bottom: 1.5rem;
+        }
+
+        .option {
+            margin-bottom: 1rem;
+        }
+
+        .nav-buttons {
+            margin-top: auto;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .nav-buttons button {
+            padding: 0.6rem 1.2rem;
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .nav-buttons button:disabled {
+            background: #ccc;
+            cursor: default;
+        }
+
+        .error {
+            text-align: center;
+            color: red;
+            margin-top: 1rem;
+        }
+    </style>
+</head>
+<body>
+
+<div class="sidebar" id="question-nav"></div>
+
+<div class="main-container">
+    <div class="top-bar">
+        <button id="submit-btn" class="submit-button" onclick="submitAll()">제출하기</button>
+    </div>
+
+    <div class="quiz-box">
+        <div class="quiz-header" id="quiz-title">문제 로딩 중...</div>
+        <form id="quiz-form">
+            <div id="quiz-options"></div>
+        </form>
+        <div class="nav-buttons">
+            <button id="prev-btn" onclick="goToPrev()">← 이전 문제</button>
+            <button id="next-btn" onclick="goToNext()">다음 문제 →</button>
+        </div>
+        <div id="error-message" class="error"></div>
+    </div>
+</div>
+
+<script>
+    let quizIds = [];
+    let quizDataMap = new Map();   // quizId -> { title, options: [{ id, content }] }
+    let answers = new Map();       // quizId -> optionId
+    let currentIndex = 0;
+
+    const quizTitle = document.getElementById("quiz-title");
+    const quizOptions = document.getElementById("quiz-options");
+    const errorBox = document.getElementById("error-message");
+
+    fetch("/quizzes/today")
+        .then(res => res.json())
+        .then(response => {
+            quizIds = response.quizIds;
+            if (!quizIds || quizIds.length === 0) {
+                quizTitle.innerText = "오늘의 퀴즈가 없습니다.";
+                return;
+            }
+
+            renderQuestionNav();
+            loadQuizByIndex(0);
+        })
+        .catch(err => {
+            console.error("퀴즈 목록 불러오기 실패", err);
+            errorBox.innerText = "퀴즈 목록을 불러오는 데 실패했습니다.";
+        });
+
+    function renderQuestionNav() {
+        const nav = document.getElementById("question-nav");
+        nav.innerHTML = "";
+        quizIds.forEach((id, index) => {
+            const btn = document.createElement("button");
+            btn.innerText = index + 1;
+            btn.onclick = () => loadQuizByIndex(index);
+            if (index === currentIndex) btn.classList.add("active");
+            if (answers.has(id)) btn.classList.add("answered");
+            nav.appendChild(btn);
+        });
+    }
+
+    function loadQuizByIndex(index) {
+        currentIndex = index;
+        const quizId = quizIds[index];
+
+        const cached = quizDataMap.get(quizId);
+        if (cached) {
+            renderQuiz(cached, quizId);
+        } else {
+            fetch(`/quizzes/${quizId}`)
+                .then(res => res.json())
+                .then(data => {
+                    quizDataMap.set(quizId, data);
+                    renderQuiz(data, quizId);
+                })
+                .catch(err => {
+                    console.error("퀴즈 조회 실패", err);
+                    quizTitle.innerText = "문제를 불러오는 데 실패했습니다.";
+                });
+        }
+    }
+
+    function renderQuiz(data, quizId) {
+        quizTitle.innerText = data.title;
+        quizOptions.innerHTML = "";
+
+        data.options.forEach((opt) => {
+            const div = document.createElement("div");
+            div.className = "option";
+            div.innerHTML = `
+        <label>
+          <input type="radio" name="answer" value="${opt.id}" ${answers.get(quizId) === opt.id ? "checked" : ""}/>
+          ${opt.content}
+        </label>
+      `;
+            quizOptions.appendChild(div);
+        });
+
+        document.querySelectorAll('input[name="answer"]').forEach(radio => {
+            radio.onchange = () => {
+                const selectedOptionId = parseInt(radio.value);
+                answers.set(quizId, selectedOptionId);
+                renderQuestionNav();
+            };
+        });
+
+        updateNavButtons();
+        renderQuestionNav();
+    }
+
+    function goToPrev() {
+        if (currentIndex > 0) loadQuizByIndex(currentIndex - 1);
+    }
+
+    function goToNext() {
+        if (currentIndex < quizIds.length - 1) loadQuizByIndex(currentIndex + 1);
+    }
+
+    function updateNavButtons() {
+        document.getElementById("prev-btn").disabled = currentIndex === 0;
+        document.getElementById("next-btn").disabled = currentIndex === quizIds.length - 1;
+    }
+
+    function submitAll() {
+        const unansweredIds = quizIds.filter(id => !answers.has(id));
+        if (unansweredIds.length > 0) {
+            const confirmSubmit = confirm("아직 풀지 않은 문제가 있습니다. 그래도 제출하시겠습니까?");
+            if (!confirmSubmit) return;
+        }
+
+        const payload = quizIds.map(id => ({
+            quizId: id,
+            optionId: answers.get(id) ?? null
+        }));
+
+        fetch("/quizzes/submit-all", {
+            method: "POST",
+            headers: {"Content-Type": "application/json"},
+            body: JSON.stringify(payload)
+        }).then(res => {
+            if (res.ok) {
+                alert("퀴즈 제출 완료!");
+                window.location.href = "/";
+            } else {
+                alert("제출 중 오류가 발생했습니다.");
+            }
+        });
+    }
+</script>
+
+</body>
+</html>
