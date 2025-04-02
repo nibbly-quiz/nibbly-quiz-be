@@ -1,6 +1,7 @@
 package com.nibbly.quiz.fixture;
 
 import com.nibbly.quiz.domain.Option;
+import com.nibbly.quiz.dto.request.OptionCreateRequest;
 
 public enum OptionFixture {
 
@@ -27,5 +28,9 @@ public enum OptionFixture {
 
     public Option getOption(Long quizId) {
         return new Option(quizId, text, isAnswer);
+    }
+
+    public OptionCreateRequest getOptionCreateRequest() {
+        return new OptionCreateRequest(text, isAnswer);
     }
 }
