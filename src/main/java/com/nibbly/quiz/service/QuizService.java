@@ -17,9 +17,9 @@ public class QuizService {
     private final QuizRepository quizRepository;
 
     @Transactional
-    public Long saveQuiz(Quiz quiz) {
+    public Quiz saveQuiz(Quiz quiz) {
         validateScheduledDate(quiz);
-        return quizRepository.save(quiz).getId();
+        return quizRepository.save(quiz);
     }
 
     private void validateScheduledDate(Quiz quiz) {
@@ -29,7 +29,7 @@ public class QuizService {
     }
 
     @Transactional(readOnly = true)
-    public List<Long> findQuizzesScheduledToday() {
+    public List<Quiz> findQuizzesScheduledToday() {
         return quizRepository.findByScheduledAt(LocalDate.now());
     }
 

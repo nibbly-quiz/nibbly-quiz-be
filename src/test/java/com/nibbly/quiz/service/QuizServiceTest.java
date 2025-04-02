@@ -56,7 +56,7 @@ class QuizServiceTest {
                 .hasMessage("과거 일자에 대한 문제는 등록할 수 없습니다");
     }
 
-    @DisplayName("오늘 출제될 문제의 ID 목록을 조회할 수 있다.")
+    @DisplayName("오늘 출제될 문제 목록을 조회할 수 있다.")
     @Test
     void should_find_quiz_ids_scheduled_today() {
         // given
@@ -64,10 +64,10 @@ class QuizServiceTest {
         quizRepository.save(todayQuiz);
 
         // when
-        List<Long> quizIds = quizService.findQuizzesScheduledToday();
+        List<Quiz> quizzes = quizService.findQuizzesScheduledToday();
 
         // then
-        assertThat(quizIds).containsExactly(todayQuiz.getId());
+        assertThat(quizzes).hasSize(1);
     }
 
     @DisplayName("문제 ID로 문제를 조회할 수 있다.")

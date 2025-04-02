@@ -1,6 +1,7 @@
 package com.nibbly.quiz.presentation;
 
 import com.nibbly.quiz.dto.request.QuizCreateRequest;
+import com.nibbly.quiz.dto.response.QuizCreateResponse;
 import com.nibbly.quiz.dto.response.QuizToSolveResponse;
 import com.nibbly.quiz.dto.response.QuizzesResponse;
 import com.nibbly.quiz.service.QuizFacadeService;
@@ -21,9 +22,9 @@ public class QuizController {
     private final QuizFacadeService quizFacadeService;
 
     @PostMapping("/quizzes")
-    public ResponseEntity<Void> saveQuiz(@Valid @RequestBody QuizCreateRequest request) {
-        Long quizId = quizFacadeService.saveQuiz(request);
-        return ResponseEntity.created(URI.create("/quizzes/" + quizId)).build();
+    public ResponseEntity<QuizCreateResponse> saveQuiz(@Valid @RequestBody QuizCreateRequest request) {
+        QuizCreateResponse createResponse = quizFacadeService.saveQuiz(request);
+        return ResponseEntity.created(URI.create("/quizzes/" + createResponse.quizId())).body(createResponse);
     }
 
     @GetMapping("/quizzes/today")

@@ -32,7 +32,7 @@ class OptionServiceTest {
     @BeforeEach
     void setUp() {
         databaseCleaner.executeTruncate();
-        quizId = quizService.saveQuiz(QuizFixture.QUIZ.getQuiz());
+        quizId = quizService.saveQuiz(QuizFixture.QUIZ.getQuiz()).getId();
     }
 
     @DisplayName("옵션을 등록할 수 있다.")

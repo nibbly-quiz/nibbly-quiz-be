@@ -3,6 +3,7 @@ package com.nibbly.quiz.service;
 import com.nibbly.quiz.Quiz;
 import com.nibbly.quiz.domain.Options;
 import com.nibbly.quiz.dto.request.QuizCreateRequest;
+import com.nibbly.quiz.dto.response.QuizCreateResponse;
 import com.nibbly.quiz.dto.response.QuizToSolveResponse;
 import com.nibbly.quiz.dto.response.QuizzesResponse;
 import lombok.RequiredArgsConstructor;
@@ -16,16 +17,17 @@ public class QuizFacadeService {
     private final QuizService quizService;
     private final OptionService optionService;
 
+
     @Transactional
-    public Long saveQuiz(QuizCreateRequest request) {
-        Long quizId = quizService.saveQuiz(request.getQuiz());
-        optionService.saveOptions(request.getOptions(quizId));
-        return quizId;
+    public QuizCreateResponse saveQuiz(QuizCreateRequest request) {
+        Quiz quiz = quizService.saveQuiz(request.getQuiz());
+        Options options = optionService.saveOptions(request.getOptions(quiz.getId()));
+        return QuizCreateResponse.of(quiz, options);
     }
 
     @Transactional(readOnly = true)
     public QuizzesResponse findQuizzesScheduledToday() {
-        return new QuizzesResponse(quizService.findQuizzesScheduledToday());
+        return QuizzesResponse.from(quizService.findQuizzesScheduledToday());
     }
 
     @Transactional(readOnly = true)

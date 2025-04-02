@@ -13,8 +13,8 @@ public class OptionService {
     private final OptionRepository optionRepository;
 
     @Transactional
-    public void saveOptions(Options options) {
-        optionRepository.saveAll(options.getOptionList());
+    public Options saveOptions(Options options) {
+        return new Options(optionRepository.saveAll(options.getOptionList()));
     }
 
     @Transactional(readOnly = true)

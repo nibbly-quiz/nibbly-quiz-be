@@ -4,6 +4,7 @@ import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
 
 import com.nibbly.global.supports.DatabaseCleaner;
 import com.nibbly.quiz.dto.request.QuizCreateRequest;
+import com.nibbly.quiz.dto.response.QuizCreateResponse;
 import com.nibbly.quiz.dto.response.QuizToSolveResponse;
 import com.nibbly.quiz.fixture.QuizFixture;
 import com.nibbly.quiz.repository.OptionRepository;
@@ -69,10 +70,10 @@ class QuizFacadeServiceTest {
     void should_find_quiz_by_id() {
         // given
         QuizCreateRequest quizCreateRequest = QuizFixture.QUIZ.getQuizCreateRequest();
-        Long quizId = quizFacadeService.saveQuiz(quizCreateRequest);
+        QuizCreateResponse quizCreateResponse = quizFacadeService.saveQuiz(quizCreateRequest);
 
         // when
-        QuizToSolveResponse quizToSolveResponse = quizFacadeService.findQuizToSolve(quizId);
+        QuizToSolveResponse quizToSolveResponse = quizFacadeService.findQuizToSolve(quizCreateResponse.quizId());
 
         // then
         assertThat(quizToSolveResponse.title()).isEqualTo(quizCreateRequest.title());
