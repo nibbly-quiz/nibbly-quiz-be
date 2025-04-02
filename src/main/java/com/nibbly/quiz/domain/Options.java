@@ -38,7 +38,7 @@ public class Options {
 
     private boolean isDuplicated(List<Option> options) {
         return options.stream()
-                .map(Option::getText)
+                .map(Option::getContent)
                 .map(text -> text.replaceAll("\\s", "").toLowerCase())
                 .distinct()
                 .count() != options.size();

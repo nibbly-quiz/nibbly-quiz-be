@@ -27,16 +27,16 @@ public class Option {
     private Long questionId;
 
     @Column(columnDefinition = "VARCHAR(100)", nullable = false)
-    private String text;
+    private String content;
 
     @Column(nullable = false)
     private boolean isAnswer;
 
-    public Option(Long id, Long questionId, String text, boolean isAnswer) {
-        validateTextLength(text);
+    public Option(Long id, Long questionId, String content, boolean isAnswer) {
+        validateTextLength(content);
         this.id = id;
         this.questionId = questionId;
-        this.text = text;
+        this.content = content;
         this.isAnswer = isAnswer;
     }
 
@@ -46,7 +46,7 @@ public class Option {
         }
     }
 
-    public Option(Long questionId, String text, boolean isAnswer) {
-        this(null, questionId, text, isAnswer);
+    public Option(Long questionId, String content, boolean isAnswer) {
+        this(null, questionId, content, isAnswer);
     }
 }

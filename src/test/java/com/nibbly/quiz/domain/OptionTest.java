@@ -14,11 +14,11 @@ class OptionTest {
     @Test
     void should_create_option() {
         // given
-        String text = "정상적인 선지";
+        String content = "정상적인 선지";
         Long questionId = 1L;
 
         // when & then
-        assertThatCode(() -> new Option(1L, text, true))
+        assertThatCode(() -> new Option(1L, content, true))
                 .doesNotThrowAnyException();
     }
 
@@ -26,11 +26,11 @@ class OptionTest {
     @Test
     void should_throw_exception_when_text_length_exceeds_100() {
         // given
-        String text = "a".repeat(101);
+        String content = "a".repeat(101);
         Long questionId = 1L;
 
         // when & then
-        assertThatThrownBy(() -> new Option(1L, text, false))
+        assertThatThrownBy(() -> new Option(1L, content, false))
                 .isInstanceOf(NibblyQuizException.class)
                 .hasMessage("선지 내용은 100자를 넘을 수 없습니다");
     }

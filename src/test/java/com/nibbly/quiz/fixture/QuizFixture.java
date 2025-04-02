@@ -14,27 +14,27 @@ public enum QuizFixture {
     ),
     ;
 
-    private final String text;
+    private final String title;
     private final LocalDate scheduledAt;
     private final List<OptionFixture> options;
 
-    QuizFixture(String text, LocalDate scheduledAt, List<OptionFixture> options) {
-        this.text = text;
+    QuizFixture(String title, LocalDate scheduledAt, List<OptionFixture> options) {
+        this.title = title;
         this.scheduledAt = scheduledAt;
         this.options = options;
     }
 
     public Quiz getQuestion() {
-        return new Quiz(text, scheduledAt);
+        return new Quiz(title, scheduledAt);
     }
 
     public Quiz getQuestionScheduledAt(LocalDate scheduledAt) {
-        return new Quiz(text, scheduledAt);
+        return new Quiz(title, scheduledAt);
     }
 
     public QuizCreateRequest getQuizCreateRequest() {
         return new QuizCreateRequest(
-                text,
+                title,
                 scheduledAt,
                 options.stream()
                         .map(OptionFixture::getOptionCreateRequest)

@@ -21,11 +21,11 @@ public enum OptionFixture {
     WRONG_9("오답9", false),
     ;
 
-    private final String text;
+    private final String content;
     private final boolean isAnswer;
 
-    OptionFixture(String text, boolean isAnswer) {
-        this.text = text;
+    OptionFixture(String content, boolean isAnswer) {
+        this.content = content;
         this.isAnswer = isAnswer;
     }
 
@@ -42,10 +42,10 @@ public enum OptionFixture {
     }
 
     public Option getOption(Long quizId) {
-        return new Option(quizId, text, isAnswer);
+        return new Option(quizId, content, isAnswer);
     }
 
     public OptionCreateRequest getOptionCreateRequest() {
-        return new OptionCreateRequest(text, isAnswer);
+        return new OptionCreateRequest(content, isAnswer);
     }
 }

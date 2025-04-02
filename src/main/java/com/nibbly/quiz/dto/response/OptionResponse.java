@@ -4,9 +4,9 @@ import com.nibbly.quiz.domain.Option;
 
 public record OptionResponse(
         Long id,
-        String text
+        String content
 ) {
     public static OptionResponse from(Option option) {
-        return new OptionResponse(option.getId(), option.getText());
+        return new OptionResponse(option.getId(), option.getContent());
     }
 }
