@@ -18,7 +18,7 @@ public class QuizFacadeService {
 
     @Transactional
     public Long saveQuiz(QuizCreateRequest request) {
-        Long questionId = questionService.saveQuestion(request.getQuestion());
+        Long questionId = questionService.saveQuestion(request.getQuiz());
         optionService.saveOptions(request.getOptions(questionId));
         return questionId;
     }

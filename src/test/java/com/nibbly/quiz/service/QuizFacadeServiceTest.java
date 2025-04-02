@@ -75,6 +75,6 @@ class QuizFacadeServiceTest {
         QuizResponse quiz = quizFacadeService.getQuiz(quizId);
 
         // then
-        assertThat(quiz.question().text()).isEqualTo(quizCreateRequest.questionRequest().text());
+        assertThat(quiz.question().text()).isEqualTo(quizCreateRequest.text());
     }
 }

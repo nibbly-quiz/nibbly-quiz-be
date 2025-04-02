@@ -92,6 +92,6 @@ class QuizControllerTest {
                 .when().get("/quizzes/" + quizId)
                 .then().log().all()
                 .statusCode(200)
-                .body("question.text", org.hamcrest.Matchers.equalTo(quizCreateRequest.getQuestion().getText()));
+                .body("question.text", org.hamcrest.Matchers.equalTo(quizCreateRequest.getQuiz().getText()));
     }
 }

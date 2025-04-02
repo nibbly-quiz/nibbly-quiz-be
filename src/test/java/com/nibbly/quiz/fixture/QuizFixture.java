@@ -1,7 +1,6 @@
 package com.nibbly.quiz.fixture;
 
 import com.nibbly.quiz.Quiz;
-import com.nibbly.quiz.dto.request.QuestionCreateRequest;
 import com.nibbly.quiz.dto.request.QuizCreateRequest;
 import java.time.LocalDate;
 import java.util.List;
@@ -35,7 +34,8 @@ public enum QuizFixture {
 
     public QuizCreateRequest getQuizCreateRequest() {
         return new QuizCreateRequest(
-                new QuestionCreateRequest(text, scheduledAt),
+                text,
+                scheduledAt,
                 options.stream()
                         .map(OptionFixture::getOptionCreateRequest)
                         .toList()
