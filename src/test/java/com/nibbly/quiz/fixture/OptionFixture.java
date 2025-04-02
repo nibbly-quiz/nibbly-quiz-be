@@ -36,11 +36,9 @@ public enum OptionFixture {
     }
 
     public static Options getOptions(Long quizId, OptionFixture... optionFixtures) {
-        return new Options(Arrays.stream(optionFixtures)
-                .map(optionFixture -> optionFixture.getOption(quizId))
-                .toList());
+        return new Options(getOptionList(quizId, optionFixtures));
     }
-
+    
     public Option getOption(Long quizId) {
         return new Option(quizId, content, isAnswer);
     }
