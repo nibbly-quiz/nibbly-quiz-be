@@ -52,15 +52,14 @@ class QuizControllerTest {
         QuizCreateRequest quizCreateRequest = QuizFixture.QUIZ.getQuizCreateRequest();
 
         // when
-        String locationHeader = RestAssured.given().log().all()
+        Long quizId = RestAssured.given().log().all()
                 .contentType(ContentType.JSON)
                 .body(quizCreateRequest)
                 .when().post("/quizzes")
                 .then().log().all()
                 .statusCode(201)
                 .extract()
-                .header("Location");
-        Long quizId = Long.parseLong(locationHeader.substring(locationHeader.lastIndexOf("/") + 1));
+                .jsonPath().getLong("quizId");
 
         // then
         RestAssured.given().log().all()
@@ -77,15 +76,14 @@ class QuizControllerTest {
         QuizCreateRequest quizCreateRequest = QuizFixture.QUIZ.getQuizCreateRequest();
 
         // when
-        String locationHeader = RestAssured.given().log().all()
+        Long quizId = RestAssured.given().log().all()
                 .contentType(ContentType.JSON)
                 .body(quizCreateRequest)
                 .when().post("/quizzes")
                 .then().log().all()
                 .statusCode(201)
                 .extract()
-                .header("Location");
-        Long quizId = Long.parseLong(locationHeader.substring(locationHeader.lastIndexOf("/") + 1));
+                .jsonPath().getLong("quizId");
 
         // then
         RestAssured.given().log().all()
