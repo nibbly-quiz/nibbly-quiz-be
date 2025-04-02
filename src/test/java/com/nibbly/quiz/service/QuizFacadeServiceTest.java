@@ -72,9 +72,9 @@ class QuizFacadeServiceTest {
         Long quizId = quizFacadeService.saveQuiz(quizCreateRequest);
 
         // when
-        QuizResponse quiz = quizFacadeService.getQuiz(quizId);
+        QuizResponse quizResponse = quizFacadeService.getQuiz(quizId);
 
         // then
-        assertThat(quiz.question().text()).isEqualTo(quizCreateRequest.text());
+        assertThat(quizResponse.text()).isEqualTo(quizCreateRequest.text());
     }
 }
