@@ -6,7 +6,7 @@ import java.util.List;
 
 public record QuizResponse(
         Long id,
-        String text,
+        String title,
         List<OptionResponse> options
 ) {
     public static QuizResponse of(Quiz quiz, Options options) {
@@ -14,6 +14,6 @@ public record QuizResponse(
                 .stream()
                 .map(OptionResponse::from)
                 .toList();
-        return new QuizResponse(quiz.getId(), quiz.getText(), optionResponses);
+        return new QuizResponse(quiz.getId(), quiz.getTitle(), optionResponses);
     }
 }

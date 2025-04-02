@@ -18,33 +18,33 @@ import lombok.NoArgsConstructor;
 @Entity
 public class Quiz {
 
-    private static final int MAX_TEXT_LENGTH = 500;
+    private static final int MAX_TITLE_LENGTH = 500;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(columnDefinition = "VARCHAR(500)", nullable = false)
-    private String text;
+    private String title;
 
     @Column(nullable = false)
     private LocalDate scheduledAt;
 
-    public Quiz(Long id, String text, LocalDate scheduledAt) {
-        validateTextLength(text);
+    public Quiz(Long id, String title, LocalDate scheduledAt) {
+        validateTitleLength(title);
         this.id = id;
-        this.text = text;
+        this.title = title;
         this.scheduledAt = scheduledAt;
     }
 
-    private void validateTextLength(String text) {
-        if (text.length() > MAX_TEXT_LENGTH) {
+    private void validateTitleLength(String text) {
+        if (text.length() > MAX_TITLE_LENGTH) {
             throw new NibblyQuizException(ErrorCode.INVALID_QUESTION_LENGTH);
         }
     }
 
-    public Quiz(String text, LocalDate scheduledAt) {
-        this(null, text, scheduledAt);
+    public Quiz(String title, LocalDate scheduledAt) {
+        this(null, title, scheduledAt);
     }
 
     public boolean isScheduledBefore(LocalDate date) {
