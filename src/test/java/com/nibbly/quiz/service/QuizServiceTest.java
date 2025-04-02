@@ -8,7 +8,7 @@ import com.nibbly.global.exception.NibblyQuizException;
 import com.nibbly.global.supports.DatabaseCleaner;
 import com.nibbly.quiz.Quiz;
 import com.nibbly.quiz.fixture.QuizFixture;
-import com.nibbly.quiz.repository.QuestionRepository;
+import com.nibbly.quiz.repository.QuizRepository;
 import java.time.LocalDate;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
@@ -17,14 +17,14 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-@DisplayName("QuestionService 테스트")
+@DisplayName("QuizService 테스트")
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.NONE)
 class QuizServiceTest {
 
     @Autowired
-    private QuestionService questionService;
+    private QuizService quizService;
     @Autowired
-    private QuestionRepository questionRepository;
+    private QuizRepository quizRepository;
     @Autowired
     private DatabaseCleaner databaseCleaner;
 
@@ -35,64 +35,64 @@ class QuizServiceTest {
 
     @DisplayName("문제를 등록할 수 있다.")
     @Test
-    void should_create_question() {
+    void should_create_quiz() {
         // given
-        Quiz quiz = QuizFixture.QUIZ.getQuestion();
+        Quiz quiz = QuizFixture.QUIZ.getQuiz();
 
         // when & then
-        assertThatCode(() -> questionService.saveQuestion(quiz))
+        assertThatCode(() -> quizService.saveQuiz(quiz))
                 .doesNotThrowAnyException();
     }
 
     @DisplayName("과거 일자에 대한 문제는 등록할 수 없다.")
     @Test
-    void should_throw_exception_when_question_is_scheduled_before_today() {
+    void should_throw_exception_when_quiz_is_scheduled_before_today() {
         // given
-        Quiz yesterdayQuiz = QuizFixture.QUIZ.getQuestionScheduledAt(LocalDate.now().minusDays(1));
+        Quiz yesterdayQuiz = QuizFixture.QUIZ.getQuizScheduledAt(LocalDate.now().minusDays(1));
 
         // when & then
-        assertThatThrownBy(() -> questionService.saveQuestion(yesterdayQuiz))
+        assertThatThrownBy(() -> quizService.saveQuiz(yesterdayQuiz))
                 .isInstanceOf(NibblyQuizException.class)
                 .hasMessage("과거 일자에 대한 문제는 등록할 수 없습니다");
     }
 
     @DisplayName("오늘 출제될 문제의 ID 목록을 조회할 수 있다.")
     @Test
-    void should_find_question_ids_scheduled_today() {
+    void should_find_quiz_ids_scheduled_today() {
         // given
-        Quiz todayQuiz = QuizFixture.QUIZ.getQuestionScheduledAt(LocalDate.now());
-        questionRepository.save(todayQuiz);
+        Quiz todayQuiz = QuizFixture.QUIZ.getQuizScheduledAt(LocalDate.now());
+        quizRepository.save(todayQuiz);
 
         // when
-        List<Long> questionIds = questionService.readQuestionIdsScheduledToday();
+        List<Long> quizIds = quizService.readQuizzesScheduledToday();
 
         // then
-        assertThat(questionIds).containsExactly(todayQuiz.getId());
+        assertThat(quizIds).containsExactly(todayQuiz.getId());
     }
 
     @DisplayName("문제 ID로 문제를 조회할 수 있다.")
     @Test
-    void should_find_question_by_id() {
+    void should_find_quiz_by_id() {
         // given
-        Quiz quiz = QuizFixture.QUIZ.getQuestion();
-        Long questionId = questionRepository.save(quiz).getId();
+        Quiz quiz = QuizFixture.QUIZ.getQuiz();
+        Long quizId = quizRepository.save(quiz).getId();
 
         // when
-        Quiz found = questionService.readQuestion(questionId);
+        Quiz found = quizService.readQuiz(quizId);
 
         // then
-        assertThatCode(() -> questionService.readQuestion(questionId))
+        assertThatCode(() -> quizService.readQuiz(quizId))
                 .doesNotThrowAnyException();
     }
 
     @DisplayName("존재하지 않는 문제 ID로 문제를 조회하면 예외가 발생한다.")
     @Test
-    void should_throw_exception_when_question_not_found() {
+    void should_throw_exception_when_quiz_not_found() {
         // given
-        Long noExistQuestionId = 1L;
+        Long noExistQuizId = 1L;
 
         // when & then
-        assertThatThrownBy(() -> questionService.readQuestion(noExistQuestionId))
+        assertThatThrownBy(() -> quizService.readQuiz(noExistQuizId))
                 .isInstanceOf(NibblyQuizException.class)
                 .hasMessage("문제를 찾을 수 없습니다");
     }

@@ -21,9 +21,9 @@ public record QuizCreateRequest(
         return new Quiz(title, scheduledAt);
     }
 
-    public Options getOptions(Long questionId) {
+    public Options getOptions(Long quizId) {
         return new Options(optionCreateRequests.stream()
-                .map(optionCreateRequest -> optionCreateRequest.toEntity(questionId))
+                .map(optionCreateRequest -> optionCreateRequest.toEntity(quizId))
                 .toList());
     }
 }

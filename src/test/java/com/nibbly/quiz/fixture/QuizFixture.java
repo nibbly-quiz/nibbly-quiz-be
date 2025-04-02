@@ -24,11 +24,11 @@ public enum QuizFixture {
         this.options = options;
     }
 
-    public Quiz getQuestion() {
+    public Quiz getQuiz() {
         return new Quiz(title, scheduledAt);
     }
 
-    public Quiz getQuestionScheduledAt(LocalDate scheduledAt) {
+    public Quiz getQuizScheduledAt(LocalDate scheduledAt) {
         return new Quiz(title, scheduledAt);
     }
 

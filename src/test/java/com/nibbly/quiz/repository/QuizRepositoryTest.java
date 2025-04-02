@@ -11,12 +11,12 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
-@DisplayName("QuestionRepository 테스트")
+@DisplayName("QuizRepository 테스트")
 @DataJpaTest
 class QuizRepositoryTest {
 
     @Autowired
-    private QuestionRepository questionRepository;
+    private QuizRepository quizRepository;
 
     @DisplayName("출제 날짜로 문제를 조회할 수 있다")
     @Test
@@ -25,13 +25,13 @@ class QuizRepositoryTest {
         LocalDate today = LocalDate.now();
         LocalDate tomorrow = LocalDate.now().plusDays(1);
 
-        Quiz quizScheduledToday = QuizFixture.QUIZ.getQuestionScheduledAt(today);
-        questionRepository.save(quizScheduledToday);
+        Quiz quizScheduledToday = QuizFixture.QUIZ.getQuizScheduledAt(today);
+        quizRepository.save(quizScheduledToday);
 
         // when & then
         Assertions.assertAll(
-                () -> assertEquals(1, questionRepository.findByScheduledAt(today).size()),
-                () -> assertEquals(0, questionRepository.findByScheduledAt(tomorrow).size())
+                () -> assertEquals(1, quizRepository.findByScheduledAt(today).size()),
+                () -> assertEquals(0, quizRepository.findByScheduledAt(tomorrow).size())
         );
     }
 }

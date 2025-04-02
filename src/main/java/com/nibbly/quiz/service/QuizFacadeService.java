@@ -3,8 +3,8 @@ package com.nibbly.quiz.service;
 import com.nibbly.quiz.Quiz;
 import com.nibbly.quiz.domain.Options;
 import com.nibbly.quiz.dto.request.QuizCreateRequest;
-import com.nibbly.quiz.dto.response.QuizResponse;
-import com.nibbly.quiz.dto.response.TodayQuestionsResponse;
+import com.nibbly.quiz.dto.response.QuizToSolveResponse;
+import com.nibbly.quiz.dto.response.QuizzesResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -13,25 +13,25 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class QuizFacadeService {
 
-    private final QuestionService questionService;
+    private final QuizService quizService;
     private final OptionService optionService;
 
     @Transactional
     public Long saveQuiz(QuizCreateRequest request) {
-        Long questionId = questionService.saveQuestion(request.getQuiz());
-        optionService.saveOptions(request.getOptions(questionId));
-        return questionId;
+        Long quizId = quizService.saveQuiz(request.getQuiz());
+        optionService.saveOptions(request.getOptions(quizId));
+        return quizId;
     }
 
     @Transactional(readOnly = true)
-    public TodayQuestionsResponse getQuestionsScheduledToday() {
-        return new TodayQuestionsResponse(questionService.readQuestionIdsScheduledToday());
+    public QuizzesResponse getQuizzesScheduledToday() {
+        return new QuizzesResponse(quizService.readQuizzesScheduledToday());
     }
 
     @Transactional(readOnly = true)
-    public QuizResponse getQuiz(Long quizId) {
-        Quiz quiz = questionService.readQuestion(quizId);
+    public QuizToSolveResponse getQuiz(Long quizId) {
+        Quiz quiz = quizService.readQuiz(quizId);
         Options options = optionService.readOptions(quizId);
-        return QuizResponse.of(quiz, options);
+        return QuizToSolveResponse.of(quiz, options);
     }
 }

@@ -12,14 +12,14 @@ import org.junit.jupiter.api.Test;
 @DisplayName("Options 테스트")
 class OptionsTest {
 
-    private static final Long QUESTION_ID = 1L;
+    private static final Long QUIZ_ID = 1L;
 
     @DisplayName("정상적인 선지 목록은 등록할 수 있다.")
     @Test
     void should_create_options() {
         // given
         List<Option> normalOptions = OptionFixture.getOptionList(
-                QUESTION_ID,
+                QUIZ_ID,
                 OptionFixture.ANSWER_1,
                 OptionFixture.WRONG_1,
                 OptionFixture.WRONG_2,
@@ -33,10 +33,10 @@ class OptionsTest {
 
     @DisplayName("정답이 여러개인 선지 목록을 등록할 수 있다")
     @Test
-    void should_create_options_when_question_has_multiple_answers() {
+    void should_create_options_when_quiz_has_multiple_answers() {
         // given
         List<Option> multipleAnswers = OptionFixture.getOptionList(
-                QUESTION_ID,
+                QUIZ_ID,
                 OptionFixture.ANSWER_1,
                 OptionFixture.ANSWER_2,
                 OptionFixture.WRONG_1,
@@ -50,10 +50,10 @@ class OptionsTest {
 
     @DisplayName("정답 뿐인 선지를 등록할 수 있다")
     @Test
-    void should_create_options_when_question_has_only_answers() {
+    void should_create_options_when_quiz_has_only_answers() {
         // given
         List<Option> onlyAnswers = OptionFixture.getOptionList(
-                QUESTION_ID,
+                QUIZ_ID,
                 OptionFixture.ANSWER_1,
                 OptionFixture.ANSWER_2
         );
@@ -65,10 +65,10 @@ class OptionsTest {
 
     @DisplayName("정답이 없는 선지 목록은 등록할 수 없다.")
     @Test
-    void should_throw_exception_when_question_has_no_answer() {
+    void should_throw_exception_when_quiz_has_no_answer() {
         // given
         List<Option> noAnswerOptions = OptionFixture.getOptionList(
-                QUESTION_ID,
+                QUIZ_ID,
                 OptionFixture.WRONG_1,
                 OptionFixture.WRONG_2,
                 OptionFixture.WRONG_3
@@ -82,10 +82,10 @@ class OptionsTest {
 
     @DisplayName("선지 내용이 중복되는 문제는 등록할 수 없다.")
     @Test
-    void should_throw_exception_when_question_has_duplicate_options() {
+    void should_throw_exception_when_quiz_has_duplicate_options() {
         // given
         List<Option> duplicateOptions = OptionFixture.getOptionList(
-                QUESTION_ID,
+                QUIZ_ID,
                 OptionFixture.ANSWER_1,
                 OptionFixture.WRONG_1,
                 OptionFixture.WRONG_1,
@@ -101,10 +101,10 @@ class OptionsTest {
 
     @DisplayName("대소문자와 공백을 무시한 선지 내용이 중복되는 문제는 등록할 수 없다")
     @Test
-    void should_throw_exception_when_question_has_duplicate_options_ignoring_case_and_whitespace() {
+    void should_throw_exception_when_quiz_has_duplicate_options_ignoring_case_and_whitespace() {
         // given
-        Option option1 = new Option(QUESTION_ID, "dupli cate", true);
-        Option option2 = new Option(QUESTION_ID, "Duplicate", false);
+        Option option1 = new Option(QUIZ_ID, "dupli cate", true);
+        Option option2 = new Option(QUIZ_ID, "Duplicate", false);
         List<Option> duplicateOptions = List.of(option1, option2);
 
         // when & then
@@ -118,7 +118,7 @@ class OptionsTest {
     void should_throw_exception_when_trying_to_modify_option_list() {
         // given
         Options options = new Options(OptionFixture.getOptionList(
-                QUESTION_ID,
+                QUIZ_ID,
                 OptionFixture.ANSWER_1,
                 OptionFixture.WRONG_1,
                 OptionFixture.WRONG_2,
@@ -134,7 +134,7 @@ class OptionsTest {
     @Test
     void should_throw_exception_when_option_size_is_less_than_2() {
         // given
-        List<Option> oneOption = OptionFixture.getOptionList(QUESTION_ID, OptionFixture.ANSWER_1);
+        List<Option> oneOption = OptionFixture.getOptionList(QUIZ_ID, OptionFixture.ANSWER_1);
         ;
 
         // when & then
@@ -148,7 +148,7 @@ class OptionsTest {
     void should_throw_exception_when_option_size_is_more_than_10() {
         // given
         List<Option> elevenOptions = OptionFixture.getOptionList(
-                QUESTION_ID,
+                QUIZ_ID,
                 OptionFixture.ANSWER_1,
                 OptionFixture.ANSWER_2,
                 OptionFixture.WRONG_1,

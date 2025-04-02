@@ -4,10 +4,10 @@ import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
 
 import com.nibbly.global.supports.DatabaseCleaner;
 import com.nibbly.quiz.dto.request.QuizCreateRequest;
-import com.nibbly.quiz.dto.response.QuizResponse;
+import com.nibbly.quiz.dto.response.QuizToSolveResponse;
 import com.nibbly.quiz.fixture.QuizFixture;
 import com.nibbly.quiz.repository.OptionRepository;
-import com.nibbly.quiz.repository.QuestionRepository;
+import com.nibbly.quiz.repository.QuizRepository;
 import java.util.List;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -23,7 +23,7 @@ class QuizFacadeServiceTest {
     @Autowired
     private QuizFacadeService quizFacadeService;
     @Autowired
-    private QuestionRepository questionRepository;
+    private QuizRepository quizRepository;
     @Autowired
     private OptionRepository optionRepository;
     @Autowired
@@ -45,23 +45,23 @@ class QuizFacadeServiceTest {
 
         // then
         Assertions.assertAll(
-                () -> assertThat(questionRepository.findAll()).hasSize(1),
+                () -> assertThat(quizRepository.findAll()).hasSize(1),
                 () -> assertThat(optionRepository.findAll()).hasSize(quizCreateRequest.optionCreateRequests().size())
         );
     }
 
     @DisplayName("오늘 출제될 문제의 ID 목록을 조회할 수 있다.")
     @Test
-    void should_find_question_ids_scheduled_today() {
+    void should_find_quiz_ids_scheduled_today() {
         // given
         QuizCreateRequest quizCreateRequest = QuizFixture.QUIZ.getQuizCreateRequest();
         quizFacadeService.saveQuiz(quizCreateRequest);
 
         // when
-        List<Long> questionIdsScheduledToday = quizFacadeService.getQuestionsScheduledToday().quizIds();
+        List<Long> quizIdsScheduledToday = quizFacadeService.getQuizzesScheduledToday().quizIds();
 
         // then
-        assertThat(questionIdsScheduledToday).hasSize(1);
+        assertThat(quizIdsScheduledToday).hasSize(1);
     }
 
     @DisplayName("ID를 기반으로 퀴즈를 조회할 수 있다.")
@@ -72,9 +72,9 @@ class QuizFacadeServiceTest {
         Long quizId = quizFacadeService.saveQuiz(quizCreateRequest);
 
         // when
-        QuizResponse quizResponse = quizFacadeService.getQuiz(quizId);
+        QuizToSolveResponse quizToSolveResponse = quizFacadeService.getQuiz(quizId);
 
         // then
-        assertThat(quizResponse.title()).isEqualTo(quizCreateRequest.title());
+        assertThat(quizToSolveResponse.title()).isEqualTo(quizCreateRequest.title());
     }
 }

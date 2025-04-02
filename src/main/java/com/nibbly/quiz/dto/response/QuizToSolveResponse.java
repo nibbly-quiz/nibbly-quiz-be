@@ -4,16 +4,16 @@ import com.nibbly.quiz.Quiz;
 import com.nibbly.quiz.domain.Options;
 import java.util.List;
 
-public record QuizResponse(
+public record QuizToSolveResponse(
         Long id,
         String title,
         List<OptionResponse> options
 ) {
-    public static QuizResponse of(Quiz quiz, Options options) {
+    public static QuizToSolveResponse of(Quiz quiz, Options options) {
         List<OptionResponse> optionResponses = options.getOptionList()
                 .stream()
                 .map(OptionResponse::from)
                 .toList();
-        return new QuizResponse(quiz.getId(), quiz.getTitle(), optionResponses);
+        return new QuizToSolveResponse(quiz.getId(), quiz.getTitle(), optionResponses);
     }
 }

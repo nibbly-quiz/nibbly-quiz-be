@@ -9,7 +9,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface QuestionRepository extends JpaRepository<Quiz, Long> {
+public interface QuizRepository extends JpaRepository<Quiz, Long> {
     @Query("SELECT q.id FROM Quiz q WHERE q.scheduledAt = :scheduleAt")
     List<Long> findByScheduledAt(@Param("scheduleAt") LocalDate scheduleAt);
 }

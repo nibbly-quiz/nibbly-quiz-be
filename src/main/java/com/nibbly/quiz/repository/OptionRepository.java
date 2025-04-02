@@ -7,5 +7,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface OptionRepository extends JpaRepository<Option, Long> {
-    List<Option> findByQuestionId(Long questionId);
+    List<Option> findByQuizId(Long quizId);
 }

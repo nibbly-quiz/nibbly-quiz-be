@@ -39,7 +39,7 @@ public class Quiz {
 
     private void validateTitleLength(String text) {
         if (text.length() > MAX_TITLE_LENGTH) {
-            throw new NibblyQuizException(ErrorCode.INVALID_QUESTION_LENGTH);
+            throw new NibblyQuizException(ErrorCode.INVALID_TITLE_LENGTH);
         }
     }
 

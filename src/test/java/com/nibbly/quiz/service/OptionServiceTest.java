@@ -23,23 +23,23 @@ class OptionServiceTest {
     @Autowired
     private OptionService optionService;
     @Autowired
-    private QuestionService questionService;
+    private QuizService quizService;
     @Autowired
     private DatabaseCleaner databaseCleaner;
 
-    private Long questionId;
+    private Long quizId;
 
     @BeforeEach
     void setUp() {
         databaseCleaner.executeTruncate();
-        questionId = questionService.saveQuestion(QuizFixture.QUIZ.getQuestion());
+        quizId = quizService.saveQuiz(QuizFixture.QUIZ.getQuiz());
     }
 
     @DisplayName("옵션을 등록할 수 있다.")
     @Test
     void should_create_option() {
         // given
-        Options options = OptionFixture.getOptions(questionId, OptionFixture.ANSWER_1, OptionFixture.WRONG_1);
+        Options options = OptionFixture.getOptions(quizId, OptionFixture.ANSWER_1, OptionFixture.WRONG_1);
 
         // when & then
         assertThatCode(() -> optionService.saveOptions(options))
@@ -48,13 +48,13 @@ class OptionServiceTest {
 
     @DisplayName("문제 ID로 옵션을 조회할 수 있다.")
     @Test
-    void should_find_option_by_question_id() {
+    void should_find_option_by_quiz_id() {
         // given
-        Options options = OptionFixture.getOptions(questionId, OptionFixture.ANSWER_1, OptionFixture.WRONG_1);
+        Options options = OptionFixture.getOptions(quizId, OptionFixture.ANSWER_1, OptionFixture.WRONG_1);
         optionService.saveOptions(options);
 
         // when
-        Options found = optionService.readOptions(questionId);
+        Options found = optionService.readOptions(quizId);
 
         // then
         assertThat(found.getOptionList()).hasSize(2);

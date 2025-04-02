@@ -1,8 +1,8 @@
 package com.nibbly.quiz.presentation;
 
 import com.nibbly.quiz.dto.request.QuizCreateRequest;
-import com.nibbly.quiz.dto.response.QuizResponse;
-import com.nibbly.quiz.dto.response.TodayQuestionsResponse;
+import com.nibbly.quiz.dto.response.QuizToSolveResponse;
+import com.nibbly.quiz.dto.response.QuizzesResponse;
 import com.nibbly.quiz.service.QuizFacadeService;
 import jakarta.validation.Valid;
 import java.net.URI;
@@ -27,12 +27,12 @@ public class QuizController {
     }
 
     @GetMapping("/quizzes/today")
-    public ResponseEntity<TodayQuestionsResponse> getTodayQuiz() {
-        return ResponseEntity.ok().body(quizFacadeService.getQuestionsScheduledToday());
+    public ResponseEntity<QuizzesResponse> getTodayQuiz() {
+        return ResponseEntity.ok().body(quizFacadeService.getQuizzesScheduledToday());
     }
 
     @GetMapping("/quizzes/{quizId}")
-    public ResponseEntity<QuizResponse> getQuiz(@PathVariable Long quizId) {
+    public ResponseEntity<QuizToSolveResponse> getQuiz(@PathVariable Long quizId) {
         return ResponseEntity.ok().body(quizFacadeService.getQuiz(quizId));
     }
 }

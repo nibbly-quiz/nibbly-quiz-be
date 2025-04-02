@@ -15,13 +15,13 @@ class QuizTest {
 
     @DisplayName("문제 생성이 가능하다")
     @Test
-    void should_create_question() {
+    void should_create_quiz() {
         // given
-        String text = "문제 내용";
+        String title = "문제 내용";
         LocalDate scheduleAt = LocalDate.now();
 
         // when & then
-        assertThatCode(() -> new Quiz(text, scheduleAt))
+        assertThatCode(() -> new Quiz(title, scheduleAt))
                 .doesNotThrowAnyException();
     }
 
@@ -29,18 +29,18 @@ class QuizTest {
     @Test
     void should_throw_exception_when_text_length_exceeds_500() {
         // given
-        String text = "a".repeat(501);
+        String title = "a".repeat(501);
         LocalDate scheduleAt = LocalDate.now();
 
         // when & then
-        assertThatCode(() -> new Quiz(text, scheduleAt))
+        assertThatCode(() -> new Quiz(title, scheduleAt))
                 .isInstanceOf(NibblyQuizException.class)
                 .hasMessage("문제 내용은 500자를 넘을 수 없습니다");
     }
 
     @DisplayName("문제 출제일이 특정 날짜 이전인지 확인할 수 있다.")
     @Test
-    void should_return_true_when_question_is_scheduled_before_target() {
+    void should_return_true_when_quiz_is_scheduled_before_target() {
         // given
         Quiz quiz = new Quiz("인덱스에 대한 설명으로 올바르지 않은 것은?", LocalDate.now());
 

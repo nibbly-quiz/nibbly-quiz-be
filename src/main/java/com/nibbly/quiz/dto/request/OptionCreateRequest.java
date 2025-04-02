@@ -10,7 +10,7 @@ public record OptionCreateRequest(
         @NotNull(message = "정답 여부는 비어있을 수 없습니다.")
         Boolean isAnswer
 ) {
-    public Option toEntity(Long questionId) {
-        return new Option(questionId, content, isAnswer);
+    public Option toEntity(Long quizId) {
+        return new Option(quizId, content, isAnswer);
     }
 }

@@ -10,15 +10,16 @@ import org.junit.jupiter.api.Test;
 @DisplayName("Option 테스트")
 class OptionTest {
 
+    private static final Long QUIZ_ID = 1L;
+
     @DisplayName("정상적인 선지는 등록 가능하다")
     @Test
     void should_create_option() {
         // given
         String content = "정상적인 선지";
-        Long questionId = 1L;
 
         // when & then
-        assertThatCode(() -> new Option(1L, content, true))
+        assertThatCode(() -> new Option(QUIZ_ID, content, true))
                 .doesNotThrowAnyException();
     }
 
@@ -27,10 +28,9 @@ class OptionTest {
     void should_throw_exception_when_text_length_exceeds_100() {
         // given
         String content = "a".repeat(101);
-        Long questionId = 1L;
 
         // when & then
-        assertThatThrownBy(() -> new Option(1L, content, false))
+        assertThatThrownBy(() -> new Option(QUIZ_ID, content, false))
                 .isInstanceOf(NibblyQuizException.class)
                 .hasMessage("선지 내용은 100자를 넘을 수 없습니다");
     }
