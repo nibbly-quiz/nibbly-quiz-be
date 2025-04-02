@@ -4,7 +4,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import com.nibbly.quiz.Question;
 import com.nibbly.quiz.domain.Option;
-import java.time.LocalDate;
+import com.nibbly.quiz.fixture.OptionFixture;
+import com.nibbly.quiz.fixture.QuizFixture;
 import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -24,14 +25,20 @@ class OptionRepositoryTest {
     @Test
     void should_find_option_by_question_id() {
         // given
-        Long questionId = questionRepository.save(new Question("문제", LocalDate.now())).getId();
-        List<Option> options = List.of(new Option(questionId, "정답", true), new Option(questionId, "오답", false));
+        Question question = questionRepository.save(QuizFixture.QUIZ.getQuestion());
+        Long questionId = question.getId();
+
+        Option option1 = OptionFixture.ANSWER_1.getOption(questionId);
+        Option option2 = OptionFixture.WRONG_1.getOption(questionId);
+        Option option3 = OptionFixture.WRONG_2.getOption(questionId);
+        Option option4 = OptionFixture.WRONG_3.getOption(questionId);
+        List<Option> options = List.of(option1, option2, option3, option4);
         optionRepository.saveAll(options);
 
         // when
         List<Option> found = optionRepository.findByQuestionId(questionId);
 
         // then
-        assertThat(found).hasSize(2);
+        assertThat(found).hasSize(options.size());
     }
 }

@@ -1,5 +1,6 @@
 package com.nibbly.quiz.fixture;
 
+import com.nibbly.quiz.Question;
 import com.nibbly.quiz.dto.request.QuestionCreateRequest;
 import com.nibbly.quiz.dto.request.QuizCreateRequest;
 import java.time.LocalDate;
@@ -22,6 +23,14 @@ public enum QuizFixture {
         this.text = text;
         this.scheduledAt = scheduledAt;
         this.options = options;
+    }
+
+    public Question getQuestion() {
+        return new Question(text, scheduledAt);
+    }
+
+    public Question getQuestionScheduledAt(LocalDate scheduledAt) {
+        return new Question(text, scheduledAt);
     }
 
     public QuizCreateRequest getQuizCreateRequest() {

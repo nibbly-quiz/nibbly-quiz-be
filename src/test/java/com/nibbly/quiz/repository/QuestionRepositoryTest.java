@@ -3,8 +3,8 @@ package com.nibbly.quiz.repository;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import com.nibbly.quiz.Question;
+import com.nibbly.quiz.fixture.QuizFixture;
 import java.time.LocalDate;
-import java.util.List;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -23,18 +23,15 @@ class QuestionRepositoryTest {
     void findByScheduledAt() {
         // given
         LocalDate today = LocalDate.now();
-        Question todayScheduled1 = new Question("오늘 출제될 문제1", today);
-        Question todayScheduled2 = new Question("오늘 출제될 문제2", today);
-
         LocalDate tomorrow = LocalDate.now().plusDays(1);
-        Question tomorrowScheduled = new Question("내일 출제될 문제", tomorrow);
 
-        questionRepository.saveAll(List.of(todayScheduled1, todayScheduled2, tomorrowScheduled));
+        Question questionScheduledToday = QuizFixture.QUIZ.getQuestionScheduledAt(today);
+        questionRepository.save(questionScheduledToday);
 
         // when & then
         Assertions.assertAll(
-                () -> assertEquals(2, questionRepository.findByScheduledAt(today).size()),
-                () -> assertEquals(1, questionRepository.findByScheduledAt(tomorrow).size())
+                () -> assertEquals(1, questionRepository.findByScheduledAt(today).size()),
+                () -> assertEquals(0, questionRepository.findByScheduledAt(tomorrow).size())
         );
     }
 }
