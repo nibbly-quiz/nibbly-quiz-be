@@ -13,23 +13,18 @@ import org.junit.jupiter.api.Test;
 class OptionsTest {
 
     private static final Long QUESTION_ID = 1L;
-    private static final Option ANSWER_1 = OptionFixture.ANSWER_1.getOption(QUESTION_ID);
-    private static final Option ANSWER_2 = OptionFixture.ANSWER_2.getOption(QUESTION_ID);
-    private static final Option WRONG_1 = OptionFixture.WRONG_1.getOption(QUESTION_ID);
-    private static final Option WRONG_2 = OptionFixture.WRONG_2.getOption(QUESTION_ID);
-    private static final Option WRONG_3 = OptionFixture.WRONG_3.getOption(QUESTION_ID);
-    private static final Option WRONG_4 = OptionFixture.WRONG_4.getOption(QUESTION_ID);
-    private static final Option WRONG_5 = OptionFixture.WRONG_5.getOption(QUESTION_ID);
-    private static final Option WRONG_6 = OptionFixture.WRONG_6.getOption(QUESTION_ID);
-    private static final Option WRONG_7 = OptionFixture.WRONG_7.getOption(QUESTION_ID);
-    private static final Option WRONG_8 = OptionFixture.WRONG_8.getOption(QUESTION_ID);
-    private static final Option WRONG_9 = OptionFixture.WRONG_9.getOption(QUESTION_ID);
 
     @DisplayName("정상적인 선지 목록은 등록할 수 있다.")
     @Test
     void should_create_options() {
         // given
-        List<Option> normalOptions = List.of(ANSWER_1, WRONG_1, WRONG_2, WRONG_3);
+        List<Option> normalOptions = OptionFixture.getOptions(
+                QUESTION_ID,
+                OptionFixture.ANSWER_1,
+                OptionFixture.WRONG_1,
+                OptionFixture.WRONG_2,
+                OptionFixture.WRONG_3
+        );
 
         // when & then
         assertThatCode(() -> new Options(normalOptions))
@@ -40,7 +35,13 @@ class OptionsTest {
     @Test
     void should_create_options_when_question_has_multiple_answers() {
         // given
-        List<Option> multipleAnswers = List.of(ANSWER_1, ANSWER_2, WRONG_1, WRONG_2);
+        List<Option> multipleAnswers = OptionFixture.getOptions(
+                QUESTION_ID,
+                OptionFixture.ANSWER_1,
+                OptionFixture.ANSWER_2,
+                OptionFixture.WRONG_1,
+                OptionFixture.WRONG_2
+        );
 
         // when & then
         assertThatCode(() -> new Options(multipleAnswers))
@@ -51,7 +52,11 @@ class OptionsTest {
     @Test
     void should_create_options_when_question_has_only_answers() {
         // given
-        List<Option> onlyAnswers = List.of(ANSWER_1, ANSWER_2);
+        List<Option> onlyAnswers = OptionFixture.getOptions(
+                QUESTION_ID,
+                OptionFixture.ANSWER_1,
+                OptionFixture.ANSWER_2
+        );
 
         // when & then
         assertThatCode(() -> new Options(onlyAnswers))
@@ -62,7 +67,12 @@ class OptionsTest {
     @Test
     void should_throw_exception_when_question_has_no_answer() {
         // given
-        List<Option> noAnswerOptions = List.of(WRONG_1, WRONG_2, WRONG_3, WRONG_4);
+        List<Option> noAnswerOptions = OptionFixture.getOptions(
+                QUESTION_ID,
+                OptionFixture.WRONG_1,
+                OptionFixture.WRONG_2,
+                OptionFixture.WRONG_3
+        );
 
         // when & then
         assertThatThrownBy(() -> new Options(noAnswerOptions))
@@ -74,7 +84,14 @@ class OptionsTest {
     @Test
     void should_throw_exception_when_question_has_duplicate_options() {
         // given
-        List<Option> duplicateOptions = List.of(ANSWER_1, WRONG_1, WRONG_1, WRONG_2, WRONG_3);
+        List<Option> duplicateOptions = OptionFixture.getOptions(
+                QUESTION_ID,
+                OptionFixture.ANSWER_1,
+                OptionFixture.WRONG_1,
+                OptionFixture.WRONG_1,
+                OptionFixture.WRONG_2,
+                OptionFixture.WRONG_3
+        );
 
         // when & then
         assertThatThrownBy(() -> new Options(duplicateOptions))
@@ -100,10 +117,16 @@ class OptionsTest {
     @Test
     void should_throw_exception_when_trying_to_modify_option_list() {
         // given
-        Options options = new Options(List.of(ANSWER_1, WRONG_1, WRONG_2, WRONG_3));
+        Options options = new Options(OptionFixture.getOptions(
+                QUESTION_ID,
+                OptionFixture.ANSWER_1,
+                OptionFixture.WRONG_1,
+                OptionFixture.WRONG_2,
+                OptionFixture.WRONG_3
+        ));
 
         // when & then
-        assertThatThrownBy(() -> options.getOptionList().add(WRONG_4))
+        assertThatThrownBy(() -> options.getOptionList().remove(0))
                 .isInstanceOf(UnsupportedOperationException.class);
     }
 
@@ -111,8 +134,8 @@ class OptionsTest {
     @Test
     void should_throw_exception_when_option_size_is_less_than_2() {
         // given
-        List<Option> oneOption = List.of(ANSWER_1);
-        List<Option> noOption = List.of();
+        List<Option> oneOption = OptionFixture.getOptions(QUESTION_ID, OptionFixture.ANSWER_1);
+        ;
 
         // when & then
         assertThatThrownBy(() -> new Options(oneOption))
@@ -124,20 +147,21 @@ class OptionsTest {
     @Test
     void should_throw_exception_when_option_size_is_more_than_10() {
         // given
-        List<Option> elevenOptions = List.of(
-                ANSWER_1,
-                ANSWER_2,
-                WRONG_1,
-                WRONG_2,
-                WRONG_3,
-                WRONG_4,
-                WRONG_5,
-                WRONG_6,
-                WRONG_7,
-                WRONG_8,
-                WRONG_9
+        List<Option> elevenOptions = OptionFixture.getOptions(
+                QUESTION_ID,
+                OptionFixture.ANSWER_1,
+                OptionFixture.ANSWER_2,
+                OptionFixture.WRONG_1,
+                OptionFixture.WRONG_2,
+                OptionFixture.WRONG_3,
+                OptionFixture.WRONG_4,
+                OptionFixture.WRONG_5,
+                OptionFixture.WRONG_6,
+                OptionFixture.WRONG_7,
+                OptionFixture.WRONG_8,
+                OptionFixture.WRONG_9
         );
-        
+
         // when & then
         assertThatThrownBy(() -> new Options(elevenOptions))
                 .isInstanceOf(NibblyQuizException.class)
