@@ -1,6 +1,7 @@
 package com.nibbly.quiz.fixture;
 
 import com.nibbly.quiz.domain.Option;
+import com.nibbly.quiz.domain.Options;
 import com.nibbly.quiz.dto.request.OptionCreateRequest;
 import java.util.Arrays;
 import java.util.List;
@@ -28,10 +29,16 @@ public enum OptionFixture {
         this.isAnswer = isAnswer;
     }
 
-    public static List<Option> getOptions(Long quizId, OptionFixture... optionFixtures) {
+    public static List<Option> getOptionList(Long quizId, OptionFixture... optionFixtures) {
         return Arrays.stream(optionFixtures)
                 .map(optionFixture -> optionFixture.getOption(quizId))
                 .toList();
+    }
+
+    public static Options getOptions(Long quizId, OptionFixture... optionFixtures) {
+        return new Options(Arrays.stream(optionFixtures)
+                .map(optionFixture -> optionFixture.getOption(quizId))
+                .toList());
     }
 
     public Option getOption(Long quizId) {

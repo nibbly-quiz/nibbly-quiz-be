@@ -4,12 +4,10 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThatCode;
 import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
 
 import com.nibbly.global.supports.DatabaseCleaner;
-import com.nibbly.quiz.Question;
-import com.nibbly.quiz.domain.Option;
 import com.nibbly.quiz.domain.Options;
+import com.nibbly.quiz.fixture.OptionFixture;
+import com.nibbly.quiz.fixture.QuizFixture;
 import com.nibbly.quiz.repository.OptionRepository;
-import java.time.LocalDate;
-import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -29,19 +27,19 @@ class OptionServiceTest {
     @Autowired
     private DatabaseCleaner databaseCleaner;
 
+    private Long questionId;
+
     @BeforeEach
     void setUp() {
         databaseCleaner.executeTruncate();
+        questionId = questionService.saveQuestion(QuizFixture.QUIZ.getQuestion());
     }
 
     @DisplayName("옵션을 등록할 수 있다.")
     @Test
     void should_create_option() {
         // given
-        Long questionId = questionService.saveQuestion(new Question("문제", LocalDate.now()));
-        Option option1 = new Option(questionId, "정답", true);
-        Option option2 = new Option(questionId, "오답", false);
-        Options options = new Options(List.of(option1, option2));
+        Options options = OptionFixture.getOptions(questionId, OptionFixture.ANSWER_1, OptionFixture.WRONG_1);
 
         // when & then
         assertThatCode(() -> optionService.saveOptions(options))
@@ -52,10 +50,7 @@ class OptionServiceTest {
     @Test
     void should_find_option_by_question_id() {
         // given
-        Long questionId = questionService.saveQuestion(new Question("문제", LocalDate.now()));
-        Option option1 = new Option(questionId, "정답", true);
-        Option option2 = new Option(questionId, "오답", false);
-        Options options = new Options(List.of(option1, option2));
+        Options options = OptionFixture.getOptions(questionId, OptionFixture.ANSWER_1, OptionFixture.WRONG_1);
         optionService.saveOptions(options);
 
         // when

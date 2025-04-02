@@ -18,7 +18,7 @@ class OptionsTest {
     @Test
     void should_create_options() {
         // given
-        List<Option> normalOptions = OptionFixture.getOptions(
+        List<Option> normalOptions = OptionFixture.getOptionList(
                 QUESTION_ID,
                 OptionFixture.ANSWER_1,
                 OptionFixture.WRONG_1,
@@ -35,7 +35,7 @@ class OptionsTest {
     @Test
     void should_create_options_when_question_has_multiple_answers() {
         // given
-        List<Option> multipleAnswers = OptionFixture.getOptions(
+        List<Option> multipleAnswers = OptionFixture.getOptionList(
                 QUESTION_ID,
                 OptionFixture.ANSWER_1,
                 OptionFixture.ANSWER_2,
@@ -52,7 +52,7 @@ class OptionsTest {
     @Test
     void should_create_options_when_question_has_only_answers() {
         // given
-        List<Option> onlyAnswers = OptionFixture.getOptions(
+        List<Option> onlyAnswers = OptionFixture.getOptionList(
                 QUESTION_ID,
                 OptionFixture.ANSWER_1,
                 OptionFixture.ANSWER_2
@@ -67,7 +67,7 @@ class OptionsTest {
     @Test
     void should_throw_exception_when_question_has_no_answer() {
         // given
-        List<Option> noAnswerOptions = OptionFixture.getOptions(
+        List<Option> noAnswerOptions = OptionFixture.getOptionList(
                 QUESTION_ID,
                 OptionFixture.WRONG_1,
                 OptionFixture.WRONG_2,
@@ -84,7 +84,7 @@ class OptionsTest {
     @Test
     void should_throw_exception_when_question_has_duplicate_options() {
         // given
-        List<Option> duplicateOptions = OptionFixture.getOptions(
+        List<Option> duplicateOptions = OptionFixture.getOptionList(
                 QUESTION_ID,
                 OptionFixture.ANSWER_1,
                 OptionFixture.WRONG_1,
@@ -117,7 +117,7 @@ class OptionsTest {
     @Test
     void should_throw_exception_when_trying_to_modify_option_list() {
         // given
-        Options options = new Options(OptionFixture.getOptions(
+        Options options = new Options(OptionFixture.getOptionList(
                 QUESTION_ID,
                 OptionFixture.ANSWER_1,
                 OptionFixture.WRONG_1,
@@ -134,7 +134,7 @@ class OptionsTest {
     @Test
     void should_throw_exception_when_option_size_is_less_than_2() {
         // given
-        List<Option> oneOption = OptionFixture.getOptions(QUESTION_ID, OptionFixture.ANSWER_1);
+        List<Option> oneOption = OptionFixture.getOptionList(QUESTION_ID, OptionFixture.ANSWER_1);
         ;
 
         // when & then
@@ -147,7 +147,7 @@ class OptionsTest {
     @Test
     void should_throw_exception_when_option_size_is_more_than_10() {
         // given
-        List<Option> elevenOptions = OptionFixture.getOptions(
+        List<Option> elevenOptions = OptionFixture.getOptionList(
                 QUESTION_ID,
                 OptionFixture.ANSWER_1,
                 OptionFixture.ANSWER_2,
