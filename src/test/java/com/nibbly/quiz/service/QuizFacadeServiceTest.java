@@ -58,7 +58,7 @@ class QuizFacadeServiceTest {
         quizFacadeService.saveQuiz(quizCreateRequest);
 
         // when
-        List<Long> quizIdsScheduledToday = quizFacadeService.getQuizzesScheduledToday().quizIds();
+        List<Long> quizIdsScheduledToday = quizFacadeService.findQuizzesScheduledToday().quizIds();
 
         // then
         assertThat(quizIdsScheduledToday).hasSize(1);
@@ -72,7 +72,7 @@ class QuizFacadeServiceTest {
         Long quizId = quizFacadeService.saveQuiz(quizCreateRequest);
 
         // when
-        QuizToSolveResponse quizToSolveResponse = quizFacadeService.getQuiz(quizId);
+        QuizToSolveResponse quizToSolveResponse = quizFacadeService.findQuizToSolve(quizId);
 
         // then
         assertThat(quizToSolveResponse.title()).isEqualTo(quizCreateRequest.title());

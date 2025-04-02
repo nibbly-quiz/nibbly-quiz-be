@@ -29,12 +29,12 @@ public class QuizService {
     }
 
     @Transactional(readOnly = true)
-    public List<Long> readQuizzesScheduledToday() {
+    public List<Long> findQuizzesScheduledToday() {
         return quizRepository.findByScheduledAt(LocalDate.now());
     }
 
     @Transactional(readOnly = true)
-    public Quiz readQuiz(Long quizId) {
+    public Quiz findQuiz(Long quizId) {
         return quizRepository.findById(quizId)
                 .orElseThrow(() -> new NibblyQuizException(ErrorCode.QUIZ_NOT_FOUND));
     }

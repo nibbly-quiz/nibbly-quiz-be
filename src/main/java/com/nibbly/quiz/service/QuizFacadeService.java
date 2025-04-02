@@ -24,14 +24,14 @@ public class QuizFacadeService {
     }
 
     @Transactional(readOnly = true)
-    public QuizzesResponse getQuizzesScheduledToday() {
-        return new QuizzesResponse(quizService.readQuizzesScheduledToday());
+    public QuizzesResponse findQuizzesScheduledToday() {
+        return new QuizzesResponse(quizService.findQuizzesScheduledToday());
     }
 
     @Transactional(readOnly = true)
-    public QuizToSolveResponse getQuiz(Long quizId) {
-        Quiz quiz = quizService.readQuiz(quizId);
-        Options options = optionService.readOptions(quizId);
+    public QuizToSolveResponse findQuizToSolve(Long quizId) {
+        Quiz quiz = quizService.findQuiz(quizId);
+        Options options = optionService.findOptions(quizId);
         return QuizToSolveResponse.of(quiz, options);
     }
 }

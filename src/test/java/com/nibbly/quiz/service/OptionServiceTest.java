@@ -54,7 +54,7 @@ class OptionServiceTest {
         optionService.saveOptions(options);
 
         // when
-        Options found = optionService.readOptions(quizId);
+        Options found = optionService.findOptions(quizId);
 
         // then
         assertThat(found.getOptionList()).hasSize(2);

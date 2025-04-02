@@ -64,7 +64,7 @@ class QuizServiceTest {
         quizRepository.save(todayQuiz);
 
         // when
-        List<Long> quizIds = quizService.readQuizzesScheduledToday();
+        List<Long> quizIds = quizService.findQuizzesScheduledToday();
 
         // then
         assertThat(quizIds).containsExactly(todayQuiz.getId());
@@ -78,10 +78,10 @@ class QuizServiceTest {
         Long quizId = quizRepository.save(quiz).getId();
 
         // when
-        Quiz found = quizService.readQuiz(quizId);
+        Quiz found = quizService.findQuiz(quizId);
 
         // then
-        assertThatCode(() -> quizService.readQuiz(quizId))
+        assertThatCode(() -> quizService.findQuiz(quizId))
                 .doesNotThrowAnyException();
     }
 
@@ -92,7 +92,7 @@ class QuizServiceTest {
         Long noExistQuizId = 1L;
 
         // when & then
-        assertThatThrownBy(() -> quizService.readQuiz(noExistQuizId))
+        assertThatThrownBy(() -> quizService.findQuiz(noExistQuizId))
                 .isInstanceOf(NibblyQuizException.class)
                 .hasMessage("문제를 찾을 수 없습니다");
     }

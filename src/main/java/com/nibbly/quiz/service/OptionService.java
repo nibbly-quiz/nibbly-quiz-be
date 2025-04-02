@@ -18,7 +18,7 @@ public class OptionService {
     }
 
     @Transactional(readOnly = true)
-    public Options readOptions(Long quizId) {
+    public Options findOptions(Long quizId) {
         return new Options(optionRepository.findByQuizId(quizId));
     }
 }

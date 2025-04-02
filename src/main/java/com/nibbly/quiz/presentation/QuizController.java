@@ -21,18 +21,18 @@ public class QuizController {
     private final QuizFacadeService quizFacadeService;
 
     @PostMapping("/quizzes")
-    public ResponseEntity<Void> createQuiz(@Valid @RequestBody QuizCreateRequest request) {
+    public ResponseEntity<Void> saveQuiz(@Valid @RequestBody QuizCreateRequest request) {
         Long quizId = quizFacadeService.saveQuiz(request);
         return ResponseEntity.created(URI.create("/quizzes/" + quizId)).build();
     }
 
     @GetMapping("/quizzes/today")
-    public ResponseEntity<QuizzesResponse> getTodayQuiz() {
-        return ResponseEntity.ok().body(quizFacadeService.getQuizzesScheduledToday());
+    public ResponseEntity<QuizzesResponse> getQuizzesForToday() {
+        return ResponseEntity.ok().body(quizFacadeService.findQuizzesScheduledToday());
     }
 
     @GetMapping("/quizzes/{quizId}")
-    public ResponseEntity<QuizToSolveResponse> getQuiz(@PathVariable Long quizId) {
-        return ResponseEntity.ok().body(quizFacadeService.getQuiz(quizId));
+    public ResponseEntity<QuizToSolveResponse> getQuizToSolve(@PathVariable Long quizId) {
+        return ResponseEntity.ok().body(quizFacadeService.findQuizToSolve(quizId));
     }
 }
