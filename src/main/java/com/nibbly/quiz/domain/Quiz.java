@@ -16,7 +16,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
-public class Question {
+public class Quiz {
 
     private static final int MAX_TEXT_LENGTH = 500;
 
@@ -30,7 +30,7 @@ public class Question {
     @Column(nullable = false)
     private LocalDate scheduledAt;
 
-    public Question(Long id, String text, LocalDate scheduledAt) {
+    public Quiz(Long id, String text, LocalDate scheduledAt) {
         validateTextLength(text);
         this.id = id;
         this.text = text;
@@ -43,7 +43,7 @@ public class Question {
         }
     }
 
-    public Question(String text, LocalDate scheduledAt) {
+    public Quiz(String text, LocalDate scheduledAt) {
         this(null, text, scheduledAt);
     }
 

@@ -1,6 +1,6 @@
 package com.nibbly.quiz.dto.request;
 
-import com.nibbly.quiz.Question;
+import com.nibbly.quiz.Quiz;
 import com.nibbly.quiz.domain.Options;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
@@ -14,7 +14,7 @@ public record QuizCreateRequest(
         @Valid
         List<OptionCreateRequest> optionCreateRequests
 ) {
-    public Question getQuestion() {
+    public Quiz getQuestion() {
         return questionRequest.toEntity();
     }
 

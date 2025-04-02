@@ -1,6 +1,6 @@
 package com.nibbly.quiz.service;
 
-import com.nibbly.quiz.Question;
+import com.nibbly.quiz.Quiz;
 import com.nibbly.quiz.domain.Options;
 import com.nibbly.quiz.dto.request.QuizCreateRequest;
 import com.nibbly.quiz.dto.response.QuizResponse;
@@ -30,8 +30,8 @@ public class QuizFacadeService {
 
     @Transactional(readOnly = true)
     public QuizResponse getQuiz(Long quizId) {
-        Question question = questionService.readQuestion(quizId);
+        Quiz quiz = questionService.readQuestion(quizId);
         Options options = optionService.readOptions(quizId);
-        return QuizResponse.of(question, options);
+        return QuizResponse.of(quiz, options);
     }
 }

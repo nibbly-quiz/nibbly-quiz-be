@@ -2,7 +2,7 @@ package com.nibbly.quiz.repository;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import com.nibbly.quiz.Question;
+import com.nibbly.quiz.Quiz;
 import com.nibbly.quiz.fixture.QuizFixture;
 import java.time.LocalDate;
 import org.junit.jupiter.api.Assertions;
@@ -13,7 +13,7 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
 @DisplayName("QuestionRepository 테스트")
 @DataJpaTest
-class QuestionRepositoryTest {
+class QuizRepositoryTest {
 
     @Autowired
     private QuestionRepository questionRepository;
@@ -25,8 +25,8 @@ class QuestionRepositoryTest {
         LocalDate today = LocalDate.now();
         LocalDate tomorrow = LocalDate.now().plusDays(1);
 
-        Question questionScheduledToday = QuizFixture.QUIZ.getQuestionScheduledAt(today);
-        questionRepository.save(questionScheduledToday);
+        Quiz quizScheduledToday = QuizFixture.QUIZ.getQuestionScheduledAt(today);
+        questionRepository.save(quizScheduledToday);
 
         // when & then
         Assertions.assertAll(

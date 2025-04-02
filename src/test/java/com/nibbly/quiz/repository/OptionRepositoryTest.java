@@ -2,7 +2,7 @@ package com.nibbly.quiz.repository;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import com.nibbly.quiz.Question;
+import com.nibbly.quiz.Quiz;
 import com.nibbly.quiz.domain.Option;
 import com.nibbly.quiz.fixture.OptionFixture;
 import com.nibbly.quiz.fixture.QuizFixture;
@@ -25,8 +25,8 @@ class OptionRepositoryTest {
     @Test
     void should_find_option_by_question_id() {
         // given
-        Question question = questionRepository.save(QuizFixture.QUIZ.getQuestion());
-        Long questionId = question.getId();
+        Quiz quiz = questionRepository.save(QuizFixture.QUIZ.getQuestion());
+        Long questionId = quiz.getId();
 
         Option option1 = OptionFixture.ANSWER_1.getOption(questionId);
         Option option2 = OptionFixture.WRONG_1.getOption(questionId);

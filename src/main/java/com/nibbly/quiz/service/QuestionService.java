@@ -2,7 +2,7 @@ package com.nibbly.quiz.service;
 
 import com.nibbly.global.exception.ErrorCode;
 import com.nibbly.global.exception.NibblyQuizException;
-import com.nibbly.quiz.Question;
+import com.nibbly.quiz.Quiz;
 import com.nibbly.quiz.repository.QuestionRepository;
 import java.time.LocalDate;
 import java.util.List;
@@ -17,13 +17,13 @@ public class QuestionService {
     private final QuestionRepository questionRepository;
 
     @Transactional
-    public Long saveQuestion(Question question) {
-        validateScheduleDate(question);
-        return questionRepository.save(question).getId();
+    public Long saveQuestion(Quiz quiz) {
+        validateScheduleDate(quiz);
+        return questionRepository.save(quiz).getId();
     }
 
-    private void validateScheduleDate(Question question) {
-        if (question.isScheduledBefore(LocalDate.now())) {
+    private void validateScheduleDate(Quiz quiz) {
+        if (quiz.isScheduledBefore(LocalDate.now())) {
             throw new NibblyQuizException(ErrorCode.INVALID_SCHEDULE_DATE);
         }
     }
@@ -34,7 +34,7 @@ public class QuestionService {
     }
 
     @Transactional(readOnly = true)
-    public Question readQuestion(Long questionId) {
+    public Quiz readQuestion(Long questionId) {
         return questionRepository.findById(questionId)
                 .orElseThrow(() -> new NibblyQuizException(ErrorCode.QUESTION_NOT_FOUND));
     }

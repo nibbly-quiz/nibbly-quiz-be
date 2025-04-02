@@ -6,7 +6,7 @@ import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
 
 import com.nibbly.global.exception.NibblyQuizException;
 import com.nibbly.global.supports.DatabaseCleaner;
-import com.nibbly.quiz.Question;
+import com.nibbly.quiz.Quiz;
 import com.nibbly.quiz.fixture.QuizFixture;
 import com.nibbly.quiz.repository.QuestionRepository;
 import java.time.LocalDate;
@@ -19,7 +19,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 @DisplayName("QuestionService 테스트")
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.NONE)
-class QuestionServiceTest {
+class QuizServiceTest {
 
     @Autowired
     private QuestionService questionService;
@@ -37,10 +37,10 @@ class QuestionServiceTest {
     @Test
     void should_create_question() {
         // given
-        Question question = QuizFixture.QUIZ.getQuestion();
+        Quiz quiz = QuizFixture.QUIZ.getQuestion();
 
         // when & then
-        assertThatCode(() -> questionService.saveQuestion(question))
+        assertThatCode(() -> questionService.saveQuestion(quiz))
                 .doesNotThrowAnyException();
     }
 
@@ -48,10 +48,10 @@ class QuestionServiceTest {
     @Test
     void should_throw_exception_when_question_is_scheduled_before_today() {
         // given
-        Question yesterdayQuestion = QuizFixture.QUIZ.getQuestionScheduledAt(LocalDate.now().minusDays(1));
+        Quiz yesterdayQuiz = QuizFixture.QUIZ.getQuestionScheduledAt(LocalDate.now().minusDays(1));
 
         // when & then
-        assertThatThrownBy(() -> questionService.saveQuestion(yesterdayQuestion))
+        assertThatThrownBy(() -> questionService.saveQuestion(yesterdayQuiz))
                 .isInstanceOf(NibblyQuizException.class)
                 .hasMessage("과거 일자에 대한 문제는 등록할 수 없습니다");
     }
@@ -60,25 +60,25 @@ class QuestionServiceTest {
     @Test
     void should_find_question_ids_scheduled_today() {
         // given
-        Question todayQuestion = QuizFixture.QUIZ.getQuestionScheduledAt(LocalDate.now());
-        questionRepository.save(todayQuestion);
+        Quiz todayQuiz = QuizFixture.QUIZ.getQuestionScheduledAt(LocalDate.now());
+        questionRepository.save(todayQuiz);
 
         // when
         List<Long> questionIds = questionService.readQuestionIdsScheduledToday();
 
         // then
-        assertThat(questionIds).containsExactly(todayQuestion.getId());
+        assertThat(questionIds).containsExactly(todayQuiz.getId());
     }
 
     @DisplayName("문제 ID로 문제를 조회할 수 있다.")
     @Test
     void should_find_question_by_id() {
         // given
-        Question question = QuizFixture.QUIZ.getQuestion();
-        Long questionId = questionRepository.save(question).getId();
+        Quiz quiz = QuizFixture.QUIZ.getQuestion();
+        Long questionId = questionRepository.save(quiz).getId();
 
         // when
-        Question found = questionService.readQuestion(questionId);
+        Quiz found = questionService.readQuestion(questionId);
 
         // then
         assertThatCode(() -> questionService.readQuestion(questionId))

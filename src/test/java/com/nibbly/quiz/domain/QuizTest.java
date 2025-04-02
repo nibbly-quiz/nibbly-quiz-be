@@ -4,14 +4,14 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatCode;
 
 import com.nibbly.global.exception.NibblyQuizException;
-import com.nibbly.quiz.Question;
+import com.nibbly.quiz.Quiz;
 import java.time.LocalDate;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 @DisplayName("문제 도메인 테스트")
-class QuestionTest {
+class QuizTest {
 
     @DisplayName("문제 생성이 가능하다")
     @Test
@@ -21,7 +21,7 @@ class QuestionTest {
         LocalDate scheduleAt = LocalDate.now();
 
         // when & then
-        assertThatCode(() -> new Question(text, scheduleAt))
+        assertThatCode(() -> new Quiz(text, scheduleAt))
                 .doesNotThrowAnyException();
     }
 
@@ -33,7 +33,7 @@ class QuestionTest {
         LocalDate scheduleAt = LocalDate.now();
 
         // when & then
-        assertThatCode(() -> new Question(text, scheduleAt))
+        assertThatCode(() -> new Quiz(text, scheduleAt))
                 .isInstanceOf(NibblyQuizException.class)
                 .hasMessage("문제 내용은 500자를 넘을 수 없습니다");
     }
@@ -42,12 +42,12 @@ class QuestionTest {
     @Test
     void should_return_true_when_question_is_scheduled_before_target() {
         // given
-        Question question = new Question("인덱스에 대한 설명으로 올바르지 않은 것은?", LocalDate.now());
+        Quiz quiz = new Quiz("인덱스에 대한 설명으로 올바르지 않은 것은?", LocalDate.now());
 
         // when & then
         Assertions.assertAll(
-                () -> assertThat(question.isScheduledBefore(LocalDate.now().plusDays(1))).isTrue(),
-                () -> assertThat(question.isScheduledBefore(LocalDate.now().minusDays(1))).isFalse()
+                () -> assertThat(quiz.isScheduledBefore(LocalDate.now().plusDays(1))).isTrue(),
+                () -> assertThat(quiz.isScheduledBefore(LocalDate.now().minusDays(1))).isFalse()
         );
     }
 }
