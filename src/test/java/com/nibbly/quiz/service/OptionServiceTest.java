@@ -1,14 +1,13 @@
 package com.nibbly.quiz.service;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatCode;
+import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
 
 import com.nibbly.global.supports.DatabaseCleaner;
-import com.nibbly.quiz.Question;
-import com.nibbly.quiz.domain.Option;
-import com.nibbly.quiz.domain.OptionRepository;
 import com.nibbly.quiz.domain.Options;
-import java.time.LocalDate;
-import java.util.List;
+import com.nibbly.quiz.fixture.OptionFixture;
+import com.nibbly.quiz.fixture.QuizFixture;
+import com.nibbly.quiz.repository.OptionRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -24,26 +23,40 @@ class OptionServiceTest {
     @Autowired
     private OptionService optionService;
     @Autowired
-    private QuestionService questionService;
+    private QuizService quizService;
     @Autowired
     private DatabaseCleaner databaseCleaner;
+
+    private Long quizId;
 
     @BeforeEach
     void setUp() {
         databaseCleaner.executeTruncate();
+        quizId = quizService.saveQuiz(QuizFixture.QUIZ.getQuiz()).getId();
     }
 
     @DisplayName("옵션을 등록할 수 있다.")
     @Test
     void should_create_option() {
         // given
-        Long questionId = questionService.saveQuestion(new Question("문제", LocalDate.now()));
-        Option option1 = new Option(questionId, "정답", true);
-        Option option2 = new Option(questionId, "오답", false);
-        Options options = new Options(List.of(option1, option2));
+        Options options = OptionFixture.getOptions(quizId, OptionFixture.ANSWER_1, OptionFixture.WRONG_1);
 
         // when & then
         assertThatCode(() -> optionService.saveOptions(options))
                 .doesNotThrowAnyException();
+    }
+
+    @DisplayName("문제 ID로 옵션을 조회할 수 있다.")
+    @Test
+    void should_find_option_by_quiz_id() {
+        // given
+        Options options = OptionFixture.getOptions(quizId, OptionFixture.ANSWER_1, OptionFixture.WRONG_1);
+        optionService.saveOptions(options);
+
+        // when
+        Options found = optionService.findOptions(quizId);
+
+        // then
+        assertThat(found.getOptionList()).hasSize(2);
     }
 }

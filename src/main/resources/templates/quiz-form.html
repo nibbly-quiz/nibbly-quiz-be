@@ -102,13 +102,13 @@
 <h1>퀴즈 등록</h1>
 
 <div class="form-group">
-    <label for="text">문제 내용</label>
-    <textarea id="text" rows="4" required></textarea>
+    <label for="title">문제 내용</label>
+    <textarea id="title" rows="4" required></textarea>
 </div>
 
 <div class="form-group">
-    <label for="scheduleAt">출제 날짜</label>
-    <input type="date" id="scheduleAt" required/>
+    <label for="scheduledAt">출제 날짜</label>
+    <input type="date" id="scheduledAt" required/>
 </div>
 
 <div class="form-group options-container">
@@ -155,27 +155,25 @@
     }
 
     function submitQuiz() {
-        const text = document.getElementById("text").value;
-        const scheduleAt = document.getElementById("scheduleAt").value;
+        const title = document.getElementById("title").value;
+        const scheduledAt = document.getElementById("scheduledAt").value;
 
         const optionElements = document.querySelectorAll("#options-wrapper .option-item");
 
-        const options = Array.from(optionElements).map(item => {
+        const optionCreateRequests = Array.from(optionElements).map(item => {
             const textInput = item.querySelector("input[type='text']");
             const checkbox = item.querySelector("input[type='checkbox']");
 
             return {
-                option: textInput.value,
+                content: textInput.value,
                 isAnswer: checkbox.checked
             };
         });
 
         const payload = {
-            questionRequest: {
-                text: text,
-                scheduleAt: scheduleAt
-            },
-            optionCreateRequests: options
+            title: title,
+            scheduledAt: scheduledAt,
+            optionCreateRequests: optionCreateRequests
         };
 
         console.log("전송될 JSON:", JSON.stringify(payload, null, 2));
@@ -193,7 +191,7 @@
                     window.location.href = "/";
                 } else {
                     return res.json().then(err => {
-                        alert(err.message);
+                        alert(err.message || "서버 오류");
                     });
                 }
             })

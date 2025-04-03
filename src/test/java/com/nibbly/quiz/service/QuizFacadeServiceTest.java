@@ -3,12 +3,12 @@ package com.nibbly.quiz.service;
 import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
 
 import com.nibbly.global.supports.DatabaseCleaner;
-import com.nibbly.quiz.domain.OptionRepository;
-import com.nibbly.quiz.domain.QuestionRepository;
-import com.nibbly.quiz.dto.OptionCreateRequest;
-import com.nibbly.quiz.dto.QuestionCreateRequest;
-import com.nibbly.quiz.dto.QuizCreateRequest;
-import java.time.LocalDate;
+import com.nibbly.quiz.dto.request.QuizCreateRequest;
+import com.nibbly.quiz.dto.response.QuizCreateResponse;
+import com.nibbly.quiz.dto.response.QuizToSolveResponse;
+import com.nibbly.quiz.fixture.QuizFixture;
+import com.nibbly.quiz.repository.OptionRepository;
+import com.nibbly.quiz.repository.QuizRepository;
 import java.util.List;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -24,7 +24,7 @@ class QuizFacadeServiceTest {
     @Autowired
     private QuizFacadeService quizFacadeService;
     @Autowired
-    private QuestionRepository questionRepository;
+    private QuizRepository quizRepository;
     @Autowired
     private OptionRepository optionRepository;
     @Autowired
@@ -39,25 +39,43 @@ class QuizFacadeServiceTest {
     @Test
     void should_enroll_quiz_when_requested() {
         // given
-        QuestionCreateRequest questionCreateRequest = new QuestionCreateRequest("인덱스에 대한 설명으로 바르지 않은 것은?",
-                LocalDate.now().plusDays(1));
-
-        OptionCreateRequest optionCreateRequest1 = new OptionCreateRequest("데이터베이스의 기본키로 사용할 수 있다.", false);
-        OptionCreateRequest optionCreateRequest2 = new OptionCreateRequest("중복을 허용한다.", false);
-        OptionCreateRequest optionCreateRequest3 = new OptionCreateRequest("NULL 값을 가질 수 있다.", false);
-        OptionCreateRequest optionCreateRequest4 = new OptionCreateRequest("인덱스를 생성하면 해당 컬럼의 데이터가 정렬된다.", true);
-
-        QuizCreateRequest request = new QuizCreateRequest(questionCreateRequest,
-                List.of(optionCreateRequest1, optionCreateRequest2,
-                        optionCreateRequest3, optionCreateRequest4));
+        QuizCreateRequest quizCreateRequest = QuizFixture.QUIZ.getQuizCreateRequest();
 
         // when
-        quizFacadeService.saveQuiz(request);
+        quizFacadeService.saveQuiz(quizCreateRequest);
 
         // then
         Assertions.assertAll(
-                () -> assertThat(questionRepository.findAll()).hasSize(1),
-                () -> assertThat(optionRepository.findAll()).hasSize(4)
+                () -> assertThat(quizRepository.findAll()).hasSize(1),
+                () -> assertThat(optionRepository.findAll()).hasSize(quizCreateRequest.optionCreateRequests().size())
         );
+    }
+
+    @DisplayName("오늘 출제될 문제의 ID 목록을 조회할 수 있다.")
+    @Test
+    void should_find_quiz_ids_scheduled_today() {
+        // given
+        QuizCreateRequest quizCreateRequest = QuizFixture.QUIZ.getQuizCreateRequest();
+        quizFacadeService.saveQuiz(quizCreateRequest);
+
+        // when
+        List<Long> quizIdsScheduledToday = quizFacadeService.findQuizzesScheduledToday().quizIds();
+
+        // then
+        assertThat(quizIdsScheduledToday).hasSize(1);
+    }
+
+    @DisplayName("ID를 기반으로 퀴즈를 조회할 수 있다.")
+    @Test
+    void should_find_quiz_by_id() {
+        // given
+        QuizCreateRequest quizCreateRequest = QuizFixture.QUIZ.getQuizCreateRequest();
+        QuizCreateResponse quizCreateResponse = quizFacadeService.saveQuiz(quizCreateRequest);
+
+        // when
+        QuizToSolveResponse quizToSolveResponse = quizFacadeService.findQuizToSolve(quizCreateResponse.quizId());
+
+        // then
+        assertThat(quizToSolveResponse.title()).isEqualTo(quizCreateRequest.title());
     }
 }

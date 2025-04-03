@@ -1,8 +1,8 @@
 package com.nibbly.quiz.domain;
 
 
-import com.nibbly.quiz.global.exception.ErrorCode;
-import com.nibbly.quiz.global.exception.NibblyQuizException;
+import com.nibbly.global.exception.ErrorCode;
+import com.nibbly.global.exception.NibblyQuizException;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -24,19 +24,19 @@ public class Option {
     private Long id;
 
     @Column(nullable = false)
-    private Long questionId;
+    private Long quizId;
 
     @Column(columnDefinition = "VARCHAR(100)", nullable = false)
-    private String text;
+    private String content;
 
     @Column(nullable = false)
     private boolean isAnswer;
 
-    public Option(Long id, Long questionId, String text, boolean isAnswer) {
-        validateTextLength(text);
+    public Option(Long id, Long quizId, String content, boolean isAnswer) {
+        validateTextLength(content);
         this.id = id;
-        this.questionId = questionId;
-        this.text = text;
+        this.quizId = quizId;
+        this.content = content;
         this.isAnswer = isAnswer;
     }
 
@@ -46,7 +46,7 @@ public class Option {
         }
     }
 
-    public Option(Long questionId, String text, boolean isAnswer) {
-        this(null, questionId, text, isAnswer);
+    public Option(Long quizId, String content, boolean isAnswer) {
+        this(null, quizId, content, isAnswer);
     }
 }

@@ -1,7 +1,7 @@
 package com.nibbly.quiz.domain;
 
-import com.nibbly.quiz.global.exception.ErrorCode;
-import com.nibbly.quiz.global.exception.NibblyQuizException;
+import com.nibbly.global.exception.ErrorCode;
+import com.nibbly.global.exception.NibblyQuizException;
 import java.util.Collections;
 import java.util.List;
 
@@ -38,7 +38,7 @@ public class Options {
 
     private boolean isDuplicated(List<Option> options) {
         return options.stream()
-                .map(Option::getText)
+                .map(Option::getContent)
                 .map(text -> text.replaceAll("\\s", "").toLowerCase())
                 .distinct()
                 .count() != options.size();
