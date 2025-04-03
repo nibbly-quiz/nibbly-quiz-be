@@ -13,15 +13,19 @@ import org.junit.jupiter.api.Test;
 @DisplayName("문제 도메인 테스트")
 class QuizTest {
 
+    private static final LocalDate TOMORROW = LocalDate.now().plusDays(1);
+    private static final LocalDate YESTERDAY = LocalDate.now().minusDays(1);
+
     @DisplayName("문제 생성이 가능하다")
     @Test
     void should_create_quiz() {
         // given
         String title = "문제 내용";
+        String commentary = "문제 해설";
         LocalDate scheduleAt = LocalDate.now();
 
         // when & then
-        assertThatCode(() -> new Quiz(title, scheduleAt))
+        assertThatCode(() -> new Quiz(title, scheduleAt, commentary))
                 .doesNotThrowAnyException();
     }
 
@@ -30,10 +34,11 @@ class QuizTest {
     void should_throw_exception_when_text_length_exceeds_500() {
         // given
         String title = "a".repeat(501);
+        String commentary = "문제 해설";
         LocalDate scheduleAt = LocalDate.now();
 
         // when & then
-        assertThatCode(() -> new Quiz(title, scheduleAt))
+        assertThatCode(() -> new Quiz(title, scheduleAt, commentary))
                 .isInstanceOf(NibblyQuizException.class)
                 .hasMessage("문제 내용은 500자를 넘을 수 없습니다");
     }
@@ -42,12 +47,29 @@ class QuizTest {
     @Test
     void should_return_true_when_quiz_is_scheduled_before_target() {
         // given
-        Quiz quiz = new Quiz("인덱스에 대한 설명으로 올바르지 않은 것은?", LocalDate.now());
+        String title = "문제 내용";
+        String commentary = "문제 해설";
+        LocalDate scheduleAt = LocalDate.now();
+        Quiz quiz = new Quiz(title, LocalDate.now(), commentary);
 
         // when & then
         Assertions.assertAll(
-                () -> assertThat(quiz.isScheduledBefore(LocalDate.now().plusDays(1))).isTrue(),
-                () -> assertThat(quiz.isScheduledBefore(LocalDate.now().minusDays(1))).isFalse()
+                () -> assertThat(quiz.isScheduledBefore(TOMORROW)).isTrue(),
+                () -> assertThat(quiz.isScheduledBefore(YESTERDAY)).isFalse()
         );
+    }
+
+    @DisplayName("퀴즈 해설이 5000자를 넘어가면 예외가 발생한다")
+    @Test
+    void should_throw_exception_when_commentary_length_exceeds_5000() {
+        // given
+        String title = "문제 내용";
+        String commentary = "a".repeat(5001);
+        LocalDate scheduleAt = LocalDate.now();
+
+        // when & then
+        assertThatCode(() -> new Quiz(title, scheduleAt, commentary))
+                .isInstanceOf(NibblyQuizException.class)
+                .hasMessage("퀴즈 해설은 5000자를 넘을 수 없습니다");
     }
 }
