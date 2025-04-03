@@ -8,24 +8,28 @@ import java.util.List;
 
 public enum OptionFixture {
 
-    ANSWER_1("정답1", true),
-    ANSWER_2("정답2", true),
-    WRONG_1("오답1", false),
-    WRONG_2("오답2", false),
-    WRONG_3("오답3", false),
-    WRONG_4("오답4", false),
-    WRONG_5("오답5", false),
-    WRONG_6("오답6", false),
-    WRONG_7("오답7", false),
-    WRONG_8("오답8", false),
-    WRONG_9("오답9", false),
+    ANSWER_1("정답1", null, true),
+    ANSWER_2("정답2", null, true),
+    WRONG_1("오답1", OptionFixture.DEFAULT_CORRECTION, false),
+    WRONG_2("오답2", OptionFixture.DEFAULT_CORRECTION, false),
+    WRONG_3("오답3", OptionFixture.DEFAULT_CORRECTION, false),
+    WRONG_4("오답4", OptionFixture.DEFAULT_CORRECTION, false),
+    WRONG_5("오답5", OptionFixture.DEFAULT_CORRECTION, false),
+    WRONG_6("오답6", OptionFixture.DEFAULT_CORRECTION, false),
+    WRONG_7("오답7", OptionFixture.DEFAULT_CORRECTION, false),
+    WRONG_8("오답8", OptionFixture.DEFAULT_CORRECTION, false),
+    WRONG_9("오답9", OptionFixture.DEFAULT_CORRECTION, false),
     ;
 
+    private static final String DEFAULT_CORRECTION = "특정 이유 때문에 해당 선지는 오답입니다";
+
     private final String content;
+    private final String correction;
     private final boolean isAnswer;
 
-    OptionFixture(String content, boolean isAnswer) {
+    OptionFixture(String content, String correction, boolean isAnswer) {
         this.content = content;
+        this.correction = correction;
         this.isAnswer = isAnswer;
     }
 
@@ -38,12 +42,12 @@ public enum OptionFixture {
     public static Options getOptions(Long quizId, OptionFixture... optionFixtures) {
         return new Options(getOptionList(quizId, optionFixtures));
     }
-    
+
     public Option getOption(Long quizId) {
-        return new Option(quizId, content, isAnswer);
+        return new Option(quizId, content, correction, isAnswer);
     }
 
     public OptionCreateRequest getOptionCreateRequest() {
-        return new OptionCreateRequest(content, isAnswer);
+        return new OptionCreateRequest(content, correction, isAnswer);
     }
 }

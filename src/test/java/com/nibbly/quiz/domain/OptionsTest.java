@@ -103,8 +103,8 @@ class OptionsTest {
     @Test
     void should_throw_exception_when_quiz_has_duplicate_options_ignoring_case_and_whitespace() {
         // given
-        Option option1 = new Option(QUIZ_ID, "dupli cate", true);
-        Option option2 = new Option(QUIZ_ID, "Duplicate", false);
+        Option option1 = new Option(QUIZ_ID, "dupli cate", null, true);
+        Option option2 = new Option(QUIZ_ID, "Duplicate", "오답인 이유가 있습니다", false);
         List<Option> duplicateOptions = List.of(option1, option2);
 
         // when & then
