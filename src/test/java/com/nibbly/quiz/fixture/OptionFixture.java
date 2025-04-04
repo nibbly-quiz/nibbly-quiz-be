@@ -50,4 +50,16 @@ public enum OptionFixture {
     public OptionCreateRequest getOptionCreateRequest() {
         return new OptionCreateRequest(content, correction, isAnswer);
     }
+
+    public String getContent() {
+        return content;
+    }
+
+    public String getCorrection() {
+        return correction;
+    }
+
+    public boolean isAnswer() {
+        return isAnswer;
+    }
 }

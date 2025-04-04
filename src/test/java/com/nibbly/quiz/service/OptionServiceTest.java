@@ -4,10 +4,12 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThatCode;
 import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
 
 import com.nibbly.global.supports.DatabaseCleaner;
+import com.nibbly.quiz.domain.Option;
 import com.nibbly.quiz.domain.Options;
 import com.nibbly.quiz.fixture.OptionFixture;
 import com.nibbly.quiz.fixture.QuizFixture;
 import com.nibbly.quiz.repository.OptionRepository;
+import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -58,5 +60,24 @@ class OptionServiceTest {
 
         // then
         assertThat(found.getOptionList()).hasSize(2);
+    }
+
+    @DisplayName("퀴즈 ID와 선지 ID를 통해 정답 여부를 확인할 수 있다.")
+    @Test
+    void should_check_correct_answer() {
+        // given
+        Options options = OptionFixture.getOptions(quizId, OptionFixture.ANSWER_1, OptionFixture.WRONG_1);
+        optionService.saveOptions(options);
+        List<Long> answers = optionService.findOptions(quizId).getOptionList()
+                .stream()
+                .filter(Option::isAnswer)
+                .map(Option::getId)
+                .toList();
+
+        // when
+        boolean isCorrect = optionService.isCorrectAnswer(quizId, answers);
+
+        // then
+        assertThat(isCorrect).isTrue();
     }
 }
