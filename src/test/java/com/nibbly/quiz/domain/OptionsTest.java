@@ -1,11 +1,13 @@
 package com.nibbly.quiz.domain;
 
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatCode;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 
 import com.nibbly.global.exception.NibblyQuizException;
 import com.nibbly.quiz.fixture.OptionFixture;
 import java.util.List;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -166,5 +168,24 @@ class OptionsTest {
         assertThatThrownBy(() -> new Options(elevenOptions))
                 .isInstanceOf(NibblyQuizException.class)
                 .hasMessage("선지는 2개 이상 10개 이하로 등록해야 합니다");
+    }
+
+    @DisplayName("옵션 ID가 정답인 경우 true를 반환한다")
+    @Test
+    void should_return_true_when_option_id_is_answer() {
+        // given
+        List<Option> optionRaws = List.of(
+                new Option(1L, 1L, "정답", "정답입니다", true),
+                new Option(2L, 1L, "오답1", "오답입니다", false),
+                new Option(3L, 1L, "오답2", "오답입니다", false)
+        );
+        Options options = new Options(optionRaws);
+
+        // when & then
+        Assertions.assertAll(
+                () -> assertThat(options.isCorrectAnswer(1L)).isTrue(),
+                () -> assertThat(options.isCorrectAnswer(2L)).isFalse(),
+                () -> assertThat(options.isCorrectAnswer(3L)).isFalse()
+        );
     }
 }

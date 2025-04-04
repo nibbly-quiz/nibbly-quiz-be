@@ -53,4 +53,12 @@ public class Options {
     public List<Option> getOptionList() {
         return Collections.unmodifiableList(options);
     }
+
+    public boolean isCorrectAnswer(Long optionId) {
+        if (optionId == null) {
+            return false;
+        }
+        return options.stream()
+                .anyMatch(o -> o.isAnswer() && o.getId().equals(optionId));
+    }
 }
