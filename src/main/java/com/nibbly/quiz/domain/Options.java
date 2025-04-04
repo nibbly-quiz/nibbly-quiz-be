@@ -54,11 +54,10 @@ public class Options {
         return Collections.unmodifiableList(options);
     }
 
-    public boolean isCorrectAnswer(Long optionId) {
-        if (optionId == null) {
-            return false;
-        }
+    public boolean isCorrectAnswer(List<Long> optionIds) {
         return options.stream()
-                .anyMatch(o -> o.isAnswer() && o.getId().equals(optionId));
+                .filter(Option::isAnswer)
+                .map(Option::getId)
+                .allMatch(optionIds::contains);
     }
 }

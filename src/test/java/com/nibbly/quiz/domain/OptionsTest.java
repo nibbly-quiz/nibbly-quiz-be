@@ -183,9 +183,28 @@ class OptionsTest {
 
         // when & then
         Assertions.assertAll(
-                () -> assertThat(options.isCorrectAnswer(1L)).isTrue(),
-                () -> assertThat(options.isCorrectAnswer(2L)).isFalse(),
-                () -> assertThat(options.isCorrectAnswer(3L)).isFalse()
+                () -> assertThat(options.isCorrectAnswer(List.of(1L))).isTrue(),
+                () -> assertThat(options.isCorrectAnswer(List.of(2L))).isFalse(),
+                () -> assertThat(options.isCorrectAnswer(List.of(3L))).isFalse()
+        );
+    }
+
+    @DisplayName("정답 선지가 여러개인 경우 모두 일치하면 true를 반환한다")
+    @Test
+    void should_return_true_when_all_correct_answers() {
+        // given
+        List<Option> optionRaws = List.of(
+                new Option(1L, 1L, "정답1", "정답입니다", true),
+                new Option(2L, 1L, "정답2", "정답입니다", true),
+                new Option(3L, 1L, "오답", "오답입니다", false)
+        );
+        Options options = new Options(optionRaws);
+
+        // when & then
+        Assertions.assertAll(
+                () -> assertThat(options.isCorrectAnswer(List.of(1L, 2L))).isTrue(),
+                () -> assertThat(options.isCorrectAnswer(List.of(1L, 3L))).isFalse(),
+                () -> assertThat(options.isCorrectAnswer(List.of(2L, 3L))).isFalse()
         );
     }
 }
