@@ -7,6 +7,7 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 import com.nibbly.global.exception.NibblyQuizException;
 import com.nibbly.quiz.fixture.OptionFixture;
 import java.util.List;
+import java.util.Set;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -183,9 +184,9 @@ class OptionsTest {
 
         // when & then
         Assertions.assertAll(
-                () -> assertThat(options.isCorrectAnswer(List.of(1L))).isTrue(),
-                () -> assertThat(options.isCorrectAnswer(List.of(2L))).isFalse(),
-                () -> assertThat(options.isCorrectAnswer(List.of(3L))).isFalse()
+                () -> assertThat(options.isCorrectAnswer(Set.of(1L))).isTrue(),
+                () -> assertThat(options.isCorrectAnswer(Set.of(2L))).isFalse(),
+                () -> assertThat(options.isCorrectAnswer(Set.of(3L))).isFalse()
         );
     }
 
@@ -202,9 +203,9 @@ class OptionsTest {
 
         // when & then
         Assertions.assertAll(
-                () -> assertThat(options.isCorrectAnswer(List.of(1L, 2L))).isTrue(),
-                () -> assertThat(options.isCorrectAnswer(List.of(1L, 3L))).isFalse(),
-                () -> assertThat(options.isCorrectAnswer(List.of(2L, 3L))).isFalse()
+                () -> assertThat(options.isCorrectAnswer(Set.of(1L, 2L))).isTrue(),
+                () -> assertThat(options.isCorrectAnswer(Set.of(1L, 3L))).isFalse(),
+                () -> assertThat(options.isCorrectAnswer(Set.of(2L, 3L))).isFalse()
         );
     }
 }

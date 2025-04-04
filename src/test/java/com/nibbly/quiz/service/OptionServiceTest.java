@@ -9,7 +9,8 @@ import com.nibbly.quiz.domain.Options;
 import com.nibbly.quiz.fixture.OptionFixture;
 import com.nibbly.quiz.fixture.QuizFixture;
 import com.nibbly.quiz.repository.OptionRepository;
-import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -68,11 +69,11 @@ class OptionServiceTest {
         // given
         Options options = OptionFixture.getOptions(quizId, OptionFixture.ANSWER_1, OptionFixture.WRONG_1);
         optionService.saveOptions(options);
-        List<Long> answers = optionService.findOptions(quizId).getOptionList()
+        Set<Long> answers = optionService.findOptions(quizId).getOptionList()
                 .stream()
                 .filter(Option::isAnswer)
                 .map(Option::getId)
-                .toList();
+                .collect(Collectors.toSet());
 
         // when
         boolean isCorrect = optionService.isCorrectAnswer(quizId, answers);
