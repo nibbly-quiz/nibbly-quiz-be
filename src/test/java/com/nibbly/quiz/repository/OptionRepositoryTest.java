@@ -7,6 +7,7 @@ import com.nibbly.quiz.domain.Option;
 import com.nibbly.quiz.fixture.OptionFixture;
 import com.nibbly.quiz.fixture.QuizFixture;
 import java.util.List;
+import java.util.Set;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -59,7 +60,7 @@ class OptionRepositoryTest {
         optionRepository.saveAll(options);
 
         // when
-        List<Option> found = optionRepository.findAnswerOptions(List.of(quizId1, quizId2));
+        List<Option> found = optionRepository.findAnswerOptions(Set.of(quizId1, quizId2));
 
         // then
         assertThat(found).hasSize(2);
