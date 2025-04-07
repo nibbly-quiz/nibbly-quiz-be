@@ -47,19 +47,11 @@ public enum OptionFixture {
         return new Option(quizId, content, correction, isAnswer);
     }
 
+    public Option getOption(Long optionId, Long quizId) {
+        return new Option(optionId, quizId, content, correction, isAnswer);
+    }
+
     public OptionCreateRequest getOptionCreateRequest() {
         return new OptionCreateRequest(content, correction, isAnswer);
-    }
-
-    public String getContent() {
-        return content;
-    }
-
-    public String getCorrection() {
-        return correction;
-    }
-
-    public boolean isAnswer() {
-        return isAnswer;
     }
 }
