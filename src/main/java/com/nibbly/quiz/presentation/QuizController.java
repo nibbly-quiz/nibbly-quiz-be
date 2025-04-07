@@ -1,7 +1,9 @@
 package com.nibbly.quiz.presentation;
 
 import com.nibbly.quiz.dto.request.QuizCreateRequest;
+import com.nibbly.quiz.dto.request.QuizzesSubmitRequest;
 import com.nibbly.quiz.dto.response.QuizCreateResponse;
+import com.nibbly.quiz.dto.response.QuizSubmitResponse;
 import com.nibbly.quiz.dto.response.QuizToSolveResponse;
 import com.nibbly.quiz.dto.response.QuizzesResponse;
 import com.nibbly.quiz.service.QuizFacadeService;
@@ -35,5 +37,10 @@ public class QuizController {
     @GetMapping("/quizzes/{quizId}")
     public ResponseEntity<QuizToSolveResponse> getQuizToSolve(@PathVariable Long quizId) {
         return ResponseEntity.ok().body(quizFacadeService.findQuizToSolve(quizId));
+    }
+
+    @GetMapping("/quizzes/submit")
+    public ResponseEntity<QuizSubmitResponse> submitQuiz(@Valid @RequestBody QuizzesSubmitRequest request) {
+        return ResponseEntity.ok().body(quizFacadeService.submitQuiz(request));
     }
 }
