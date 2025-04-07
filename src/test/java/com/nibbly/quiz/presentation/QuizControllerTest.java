@@ -131,7 +131,7 @@ class QuizControllerTest {
         RestAssured.given().log().all()
                 .contentType(ContentType.JSON)
                 .body(quizzesSubmitRequest)
-                .when().get("/quizzes/submit")
+                .when().post("/quizzes/submit")
                 .then().log().all()
                 .statusCode(200)
                 .body("totalQuizCount", is(1), "correctCount", is(1));

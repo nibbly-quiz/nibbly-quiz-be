@@ -15,4 +15,9 @@ public class QuizViewController {
     public String solveQuiz() {
         return "quiz-today";
     }
+
+    @GetMapping("/quiz/grade")
+    public String gradeQuiz() {
+        return "quiz-grade";
+    }
 }

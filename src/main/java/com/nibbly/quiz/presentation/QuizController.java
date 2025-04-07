@@ -39,7 +39,7 @@ public class QuizController {
         return ResponseEntity.ok().body(quizFacadeService.findQuizToSolve(quizId));
     }
 
-    @GetMapping("/quizzes/submit")
+    @PostMapping("/quizzes/submit")
     public ResponseEntity<QuizSubmitResponse> submitQuiz(@Valid @RequestBody QuizzesSubmitRequest request) {
         return ResponseEntity.ok().body(quizFacadeService.submitQuiz(request));
     }

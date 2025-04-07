@@ -244,21 +244,11 @@
 
         const payload = quizIds.map(id => ({
             quizId: id,
-            optionId: answers.get(id) ?? null
+            selectedOptionIds: answers.has(id) ? [answers.get(id)] : []
         }));
 
-        fetch("/quizzes/submit-all", {
-            method: "POST",
-            headers: {"Content-Type": "application/json"},
-            body: JSON.stringify(payload)
-        }).then(res => {
-            if (res.ok) {
-                alert("퀴즈 제출 완료!");
-                window.location.href = "/";
-            } else {
-                alert("제출 중 오류가 발생했습니다.");
-            }
-        });
+        sessionStorage.setItem("quizSubmitPayload", JSON.stringify(payload));
+        window.location.href = "/quiz/grade";
     }
 </script>
 
