@@ -3,11 +3,11 @@ package com.nibbly.quiz.dto.response;
 import com.nibbly.quiz.Quiz;
 import java.util.List;
 
-public record QuizzesResponse(
+public record QuizzesToSolveResponse(
         List<Long> quizIds
 ) {
-    public static QuizzesResponse from(List<Quiz> quizzesScheduledToday) {
-        return new QuizzesResponse(
+    public static QuizzesToSolveResponse from(List<Quiz> quizzesScheduledToday) {
+        return new QuizzesToSolveResponse(
                 quizzesScheduledToday.stream()
                         .map(Quiz::getId)
                         .toList()

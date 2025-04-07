@@ -7,7 +7,7 @@ import com.nibbly.quiz.dto.request.QuizzesSubmitRequest;
 import com.nibbly.quiz.dto.response.QuizCreateResponse;
 import com.nibbly.quiz.dto.response.QuizSubmitResponse;
 import com.nibbly.quiz.dto.response.QuizToSolveResponse;
-import com.nibbly.quiz.dto.response.QuizzesResponse;
+import com.nibbly.quiz.dto.response.QuizzesToSolveResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -28,8 +28,8 @@ public class QuizFacadeService {
     }
 
     @Transactional(readOnly = true)
-    public QuizzesResponse findQuizzesScheduledToday() {
-        return QuizzesResponse.from(quizService.findQuizzesScheduledToday());
+    public QuizzesToSolveResponse findQuizzesScheduledToday() {
+        return QuizzesToSolveResponse.from(quizService.findQuizzesScheduledToday());
     }
 
     @Transactional(readOnly = true)
