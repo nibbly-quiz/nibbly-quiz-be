@@ -7,6 +7,7 @@ import com.nibbly.quiz.domain.Option;
 import com.nibbly.quiz.fixture.OptionFixture;
 import com.nibbly.quiz.fixture.QuizFixture;
 import java.util.List;
+import java.util.Set;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,5 +41,28 @@ class OptionRepositoryTest {
 
         // then
         assertThat(found).hasSize(options.size());
+    }
+
+    @DisplayName("문제 ID 목록으로 정답 선지들을 조회할 수 있다.")
+    @Test
+    void should_find_answer_options_by_quiz_ids() {
+        // given
+        Quiz quiz1 = quizRepository.save(QuizFixture.QUIZ.getQuiz());
+        Long quizId1 = quiz1.getId();
+        Quiz quiz2 = quizRepository.save(QuizFixture.QUIZ.getQuiz());
+        Long quizId2 = quiz2.getId();
+
+        Option option1 = OptionFixture.ANSWER_1.getOption(quizId1);
+        Option option2 = OptionFixture.WRONG_1.getOption(quizId1);
+        Option option3 = OptionFixture.WRONG_2.getOption(quizId2);
+        Option option4 = OptionFixture.ANSWER_2.getOption(quizId2);
+        List<Option> options = List.of(option1, option2, option3, option4);
+        optionRepository.saveAll(options);
+
+        // when
+        List<Option> found = optionRepository.findAnswerOptions(Set.of(quizId1, quizId2));
+
+        // then
+        assertThat(found).hasSize(2);
     }
 }

@@ -3,11 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <title>퀴즈 등록</title>
+    <link rel="stylesheet" href="https://uicdn.toast.com/editor/latest/toastui-editor.min.css">
     <style>
         body {
             font-family: Arial, sans-serif;
             padding: 2rem;
-            max-width: 600px;
+            max-width: 800px;
             margin: auto;
             background-color: #f9f9f9;
         }
@@ -18,17 +19,18 @@
         }
 
         .form-group {
-            margin-bottom: 1.2rem;
+            margin-bottom: 1.5rem;
         }
 
         input[type="text"],
-        textarea,
-        input[type="date"] {
+        input[type="date"],
+        textarea {
             width: 100%;
             padding: 0.5rem;
             margin-top: 0.3rem;
             border: 1px solid #ccc;
             border-radius: 4px;
+            box-sizing: border-box;
         }
 
         .options-container {
@@ -40,13 +42,20 @@
         }
 
         .option-item {
+            margin-bottom: 1.2rem;
+            padding: 0.8rem;
+            border: 1px solid #e1e1e1;
+            border-radius: 6px;
+            background-color: #fefefe;
+        }
+
+        .option-main {
             display: flex;
             align-items: center;
             gap: 0.5rem;
-            margin-bottom: 0.8rem;
         }
 
-        .option-item input[type="text"] {
+        .option-main input[type="text"] {
             flex-grow: 1;
         }
 
@@ -55,6 +64,28 @@
             align-items: center;
             gap: 0.3rem;
             white-space: nowrap;
+        }
+
+        .option-correction-block {
+            display: flex;
+            align-items: flex-start;
+            margin-top: 0.6rem;
+            margin-left: 1.5rem;
+        }
+
+        .option-correction-block .arrow {
+            margin-right: 0.5rem;
+            font-weight: bold;
+            color: #888;
+        }
+
+        .option-correction {
+            flex-grow: 1;
+            background-color: #f2f2f2;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            padding: 0.4rem 0.6rem;
+            font-size: 0.9rem;
         }
 
         .add-option,
@@ -115,20 +146,39 @@
     <label>선지</label>
     <div id="options-wrapper">
         <div class="option-item">
-            <input type="text" placeholder="선지 내용" required/>
-            <label class="checkbox-inline">
-                <input type="checkbox"/>
-                정답
-            </label>
-            <button type="button" class="remove-option" onclick="removeOption(this)">–</button>
+            <div class="option-main">
+                <input type="text" class="option-content" placeholder="선지 내용" required/>
+                <label class="checkbox-inline">
+                    <input type="checkbox" class="option-answer"/>
+                    정답
+                </label>
+                <button type="button" class="remove-option" onclick="removeOption(this)">–</button>
+            </div>
+            <div class="option-correction-block">
+                <div class="arrow">ㄴ</div>
+                <input type="text" class="option-correction" placeholder="해설 (오답일 경우 필수)"/>
+            </div>
         </div>
     </div>
     <button type="button" class="add-option" onclick="addOption()">+ 선지 추가</button>
 </div>
 
+<div class="form-group">
+    <label for="commentary-editor">문제 해설 <small style="color:#777">(Markdown 지원 + 미리보기)</small></label>
+    <div id="commentary-editor"></div>
+</div>
+
 <button type="button" class="submit" onclick="submitQuiz()">등록하기</button>
 
+<script src="https://uicdn.toast.com/editor/latest/toastui-editor-all.min.js"></script>
 <script>
+    const editor = new toastui.Editor({
+        el: document.querySelector('#commentary-editor'),
+        height: '300px',
+        initialEditType: 'markdown',
+        previewStyle: 'vertical'
+    });
+
     function addOption() {
         const wrapper = document.getElementById("options-wrapper");
 
@@ -136,44 +186,53 @@
         div.className = "option-item";
 
         div.innerHTML = `
-            <input type="text" placeholder="선지 내용" required/>
-            <label class="checkbox-inline">
-                <input type="checkbox" />
-                정답
-            </label>
-            <button type="button" class="remove-option" onclick="removeOption(this)">–</button>
+            <div class="option-main">
+                <input type="text" class="option-content" placeholder="선지 내용" required/>
+                <label class="checkbox-inline">
+                    <input type="checkbox" class="option-answer" />
+                    정답
+                </label>
+                <button type="button" class="remove-option" onclick="removeOption(this)">–</button>
+            </div>
+            <div class="option-correction-block">
+                <div class="arrow">ㄴ</div>
+                <input type="text" class="option-correction" placeholder="해설 (오답일 경우 필수)"/>
+            </div>
         `;
-
         wrapper.appendChild(div);
     }
 
     function removeOption(button) {
         const wrapper = document.getElementById("options-wrapper");
         if (wrapper.childElementCount > 1) {
-            wrapper.removeChild(button.parentElement);
+            wrapper.removeChild(button.closest(".option-item"));
         }
     }
 
     function submitQuiz() {
         const title = document.getElementById("title").value;
         const scheduledAt = document.getElementById("scheduledAt").value;
+        const commentary = editor.getMarkdown();
 
         const optionElements = document.querySelectorAll("#options-wrapper .option-item");
 
         const optionCreateRequests = Array.from(optionElements).map(item => {
-            const textInput = item.querySelector("input[type='text']");
-            const checkbox = item.querySelector("input[type='checkbox']");
+            const content = item.querySelector(".option-content").value;
+            const isAnswer = item.querySelector(".option-answer").checked;
+            const correction = item.querySelector(".option-correction").value || null;
 
             return {
-                content: textInput.value,
-                isAnswer: checkbox.checked
+                content,
+                correction,
+                isAnswer
             };
         });
 
         const payload = {
-            title: title,
-            scheduledAt: scheduledAt,
-            optionCreateRequests: optionCreateRequests
+            title,
+            scheduledAt,
+            commentary,
+            optionCreateRequests
         };
 
         console.log("전송될 JSON:", JSON.stringify(payload, null, 2));

@@ -4,6 +4,7 @@ import com.nibbly.global.exception.ErrorCode;
 import com.nibbly.global.exception.NibblyQuizException;
 import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 
 public class Options {
 
@@ -52,5 +53,12 @@ public class Options {
 
     public List<Option> getOptionList() {
         return Collections.unmodifiableList(options);
+    }
+
+    public boolean isCorrectAnswer(Set<Long> optionIds) {
+        return options.stream()
+                .filter(Option::isAnswer)
+                .map(Option::getId)
+                .allMatch(optionIds::contains);
     }
 }

@@ -13,12 +13,14 @@ public record QuizCreateRequest(
         String title,
         @NotNull(message = "출제 날짜는 비어있을 수 없습니다.")
         LocalDate scheduledAt,
+        @NotBlank(message = "문제 해설은 비어있을 수 없습니다.")
+        String commentary,
         @NotNull(message = "선지는 비어있을 수 없습니다")
         @Valid
         List<OptionCreateRequest> optionCreateRequests
 ) {
     public Quiz getQuiz() {
-        return new Quiz(title, scheduledAt);
+        return new Quiz(title, scheduledAt, commentary);
     }
 
     public Options getOptions(Long quizId) {

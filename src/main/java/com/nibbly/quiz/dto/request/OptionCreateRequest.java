@@ -7,10 +7,11 @@ import jakarta.validation.constraints.NotNull;
 public record OptionCreateRequest(
         @NotBlank(message = "선지는 비어있을 수 없습니다.")
         String content,
+        String correction,
         @NotNull(message = "정답 여부는 비어있을 수 없습니다.")
         Boolean isAnswer
 ) {
     public Option toEntity(Long quizId) {
-        return new Option(quizId, content, isAnswer);
+        return new Option(quizId, content, correction, isAnswer);
     }
 }

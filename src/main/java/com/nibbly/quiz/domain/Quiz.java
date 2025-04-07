@@ -7,6 +7,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.Lob;
 import java.time.LocalDate;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -19,6 +20,7 @@ import lombok.NoArgsConstructor;
 public class Quiz {
 
     private static final int MAX_TITLE_LENGTH = 500;
+    private static final int MAX_COMMENTARY_LENGTH = 5000;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -30,11 +32,17 @@ public class Quiz {
     @Column(nullable = false)
     private LocalDate scheduledAt;
 
-    public Quiz(Long id, String title, LocalDate scheduledAt) {
+    @Lob
+    @Column(nullable = false)
+    private String commentary;
+
+    public Quiz(Long id, String title, LocalDate scheduledAt, String commentary) {
         validateTitleLength(title);
+        validateCommentaryLength(commentary);
         this.id = id;
         this.title = title;
         this.scheduledAt = scheduledAt;
+        this.commentary = commentary;
     }
 
     private void validateTitleLength(String text) {
@@ -43,8 +51,14 @@ public class Quiz {
         }
     }
 
-    public Quiz(String title, LocalDate scheduledAt) {
-        this(null, title, scheduledAt);
+    private void validateCommentaryLength(String commentary) {
+        if (commentary.length() > MAX_COMMENTARY_LENGTH) {
+            throw new NibblyQuizException(ErrorCode.INVALID_COMMENTARY_LENGTH);
+        }
+    }
+
+    public Quiz(String title, LocalDate scheduledAt, String commentary) {
+        this(null, title, scheduledAt, commentary);
     }
 
     public boolean isScheduledBefore(LocalDate date) {

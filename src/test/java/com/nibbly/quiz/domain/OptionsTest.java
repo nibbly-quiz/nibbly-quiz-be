@@ -1,11 +1,14 @@
 package com.nibbly.quiz.domain;
 
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatCode;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 
 import com.nibbly.global.exception.NibblyQuizException;
 import com.nibbly.quiz.fixture.OptionFixture;
 import java.util.List;
+import java.util.Set;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -103,8 +106,8 @@ class OptionsTest {
     @Test
     void should_throw_exception_when_quiz_has_duplicate_options_ignoring_case_and_whitespace() {
         // given
-        Option option1 = new Option(QUIZ_ID, "dupli cate", true);
-        Option option2 = new Option(QUIZ_ID, "Duplicate", false);
+        Option option1 = new Option(QUIZ_ID, "dupli cate", null, true);
+        Option option2 = new Option(QUIZ_ID, "Duplicate", "오답인 이유가 있습니다", false);
         List<Option> duplicateOptions = List.of(option1, option2);
 
         // when & then
@@ -166,5 +169,43 @@ class OptionsTest {
         assertThatThrownBy(() -> new Options(elevenOptions))
                 .isInstanceOf(NibblyQuizException.class)
                 .hasMessage("선지는 2개 이상 10개 이하로 등록해야 합니다");
+    }
+
+    @DisplayName("옵션 ID가 정답인 경우 true를 반환한다")
+    @Test
+    void should_return_true_when_option_id_is_answer() {
+        // given
+        List<Option> optionRaws = List.of(
+                new Option(1L, 1L, "정답", "정답입니다", true),
+                new Option(2L, 1L, "오답1", "오답입니다", false),
+                new Option(3L, 1L, "오답2", "오답입니다", false)
+        );
+        Options options = new Options(optionRaws);
+
+        // when & then
+        Assertions.assertAll(
+                () -> assertThat(options.isCorrectAnswer(Set.of(1L))).isTrue(),
+                () -> assertThat(options.isCorrectAnswer(Set.of(2L))).isFalse(),
+                () -> assertThat(options.isCorrectAnswer(Set.of(3L))).isFalse()
+        );
+    }
+
+    @DisplayName("정답 선지가 여러개인 경우 모두 일치하면 true를 반환한다")
+    @Test
+    void should_return_true_when_all_correct_answers() {
+        // given
+        List<Option> optionRaws = List.of(
+                new Option(1L, 1L, "정답1", "정답입니다", true),
+                new Option(2L, 1L, "정답2", "정답입니다", true),
+                new Option(3L, 1L, "오답", "오답입니다", false)
+        );
+        Options options = new Options(optionRaws);
+
+        // when & then
+        Assertions.assertAll(
+                () -> assertThat(options.isCorrectAnswer(Set.of(1L, 2L))).isTrue(),
+                () -> assertThat(options.isCorrectAnswer(Set.of(1L, 3L))).isFalse(),
+                () -> assertThat(options.isCorrectAnswer(Set.of(2L, 3L))).isFalse()
+        );
     }
 }

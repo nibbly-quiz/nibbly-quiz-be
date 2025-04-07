@@ -14,7 +14,10 @@ public enum ErrorCode {
     INVALID_OPTION_LENGTH("선지 내용은 100자를 넘을 수 없습니다", HttpStatus.BAD_REQUEST),
     INVALID_TITLE_LENGTH("문제 내용은 500자를 넘을 수 없습니다", HttpStatus.BAD_REQUEST),
     INVALID_OPTION_SIZE("선지는 2개 이상 10개 이하로 등록해야 합니다", HttpStatus.BAD_REQUEST),
+    INVALID_CORRECTION_LENGTH("선지 해설은 100자를 넘을 수 없습니다", HttpStatus.BAD_REQUEST),
+    CORRECTION_REQUIRED("오답 선지에는 해설을 필수로 등록해야 합니다", HttpStatus.BAD_REQUEST),
     QUIZ_NOT_FOUND("문제를 찾을 수 없습니다", HttpStatus.NOT_FOUND),
+    INVALID_COMMENTARY_LENGTH("퀴즈 해설은 5000자를 넘을 수 없습니다", HttpStatus.BAD_REQUEST),
 
     INTERNAL_SERVER_ERROR("서버 내부 오류가 발생하였습니다", HttpStatus.INTERNAL_SERVER_ERROR),
     ;

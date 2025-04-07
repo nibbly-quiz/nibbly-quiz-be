@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>퀴즈 결과</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            padding: 2rem;
+            max-width: 600px;
+            margin: auto;
+        }
+
+        .result-box {
+            background: #ffffff;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        .result-title {
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin-bottom: 1.5rem;
+            color: #333;
+        }
+
+        .result-item {
+            font-size: 1.1rem;
+            margin-bottom: 0.8rem;
+        }
+
+        .grade {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #28a745;
+            margin-top: 1rem;
+            transition: all 0.2s ease-in-out;
+        }
+
+        .back-button {
+            margin-top: 2rem;
+            padding: 0.6rem 1.2rem;
+            background: #007BFF;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .back-button:hover {
+            background: #0056b3;
+        }
+    </style>
+</head>
+<body>
+
+<div class="result-box">
+    <div class="result-title">퀴즈 결과</div>
+
+    <div class="result-item">전체 문제 수: <span id="total-count">-</span></div>
+    <div class="result-item">맞힌 문제 수: <span id="correct-count">-</span></div>
+    <div class="result-item grade">등급: <span id="grade">-</span></div>
+
+    <button class="back-button" onclick="goHome()">홈으로 돌아가기</button>
+</div>
+
+<script>
+    const totalElement = document.getElementById("total-count");
+    const correctElement = document.getElementById("correct-count");
+    const gradeElement = document.getElementById("grade");
+    const grades = ["F", "C", "B", "B+", "A", "A+"];
+
+    const savedPayload = sessionStorage.getItem("quizSubmitPayload");
+
+    if (!savedPayload) {
+        alert("제출 데이터가 없습니다. 다시 퀴즈를 풀어주세요.");
+        window.location.href = "/quiz/today";
+    } else {
+        const payload = JSON.parse(savedPayload);
+
+        fetch("/quizzes/submit", {
+            method: "POST",
+            headers: {"Content-Type": "application/json"},
+            body: JSON.stringify({quizSubmitRequests: payload})
+        })
+            .then(res => {
+                if (!res.ok) throw new Error("서버 오류");
+                return res.json();
+            })
+            .then(data => {
+                // 애니메이션 효과
+                const {totalQuizCount, correctCount, rank} = data;
+                let currentCorrect = 0;
+                let gradeIndex = 0;
+
+                totalElement.innerText = totalQuizCount;
+
+                const spin = setInterval(() => {
+                    if (currentCorrect < correctCount) {
+                        currentCorrect++;
+                        correctElement.innerText = currentCorrect;
+                    }
+
+                    gradeElement.innerText = grades[gradeIndex];
+                    gradeIndex = (gradeIndex + 1) % grades.length;
+
+                    if (currentCorrect === correctCount) {
+                        clearInterval(spin);
+                        setTimeout(() => {
+                            gradeElement.innerText = rank;
+                        }, 400);
+                    }
+                }, 100);
+            })
+            .catch(err => {
+                console.error("채점 실패", err);
+                alert("채점 중 오류가 발생했습니다.");
+                window.location.href = "/quiz/today";
+            });
+    }
+
+    function goHome() {
+        window.location.href = "/";
+    }
+</script>
+
+</body>
+</html>
