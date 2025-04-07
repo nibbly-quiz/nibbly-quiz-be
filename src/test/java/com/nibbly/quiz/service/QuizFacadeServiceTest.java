@@ -3,13 +3,19 @@ package com.nibbly.quiz.service;
 import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
 
 import com.nibbly.global.supports.DatabaseCleaner;
+import com.nibbly.quiz.domain.Option;
 import com.nibbly.quiz.dto.request.QuizCreateRequest;
+import com.nibbly.quiz.dto.request.QuizzesSubmitRequest;
+import com.nibbly.quiz.dto.request.QuizzesSubmitRequest.QuizSubmitRequest;
 import com.nibbly.quiz.dto.response.QuizCreateResponse;
+import com.nibbly.quiz.dto.response.QuizSubmitResponse;
 import com.nibbly.quiz.dto.response.QuizToSolveResponse;
 import com.nibbly.quiz.fixture.QuizFixture;
 import com.nibbly.quiz.repository.OptionRepository;
 import com.nibbly.quiz.repository.QuizRepository;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -42,7 +48,7 @@ class QuizFacadeServiceTest {
         QuizCreateRequest quizCreateRequest = QuizFixture.QUIZ.getQuizCreateRequest();
 
         // when
-        quizFacadeService.saveQuiz(quizCreateRequest);
+        QuizCreateResponse quizCreateResponse = quizFacadeService.saveQuiz(quizCreateRequest);
 
         // then
         Assertions.assertAll(
@@ -77,5 +83,29 @@ class QuizFacadeServiceTest {
 
         // then
         assertThat(quizToSolveResponse.title()).isEqualTo(quizCreateRequest.title());
+    }
+
+    @DisplayName("퀴즈 답안을 제출하면 전체 문제 수와 정답 수를 반환한다.")
+    @Test
+    void should_submit_quiz() {
+        // given
+        QuizCreateRequest quizCreateRequest = QuizFixture.QUIZ.getQuizCreateRequest();
+        Long quizId = quizFacadeService.saveQuiz(quizCreateRequest).quizId();
+        Set<Long> answerOptionIds = optionRepository.findByQuizId(quizId).stream()
+                .filter(Option::isAnswer)
+                .map(Option::getId)
+                .collect(Collectors.toSet());
+
+        QuizSubmitRequest quizSubmitRequest = new QuizSubmitRequest(quizId, answerOptionIds);
+        QuizzesSubmitRequest quizzesSubmitRequest = new QuizzesSubmitRequest(List.of(quizSubmitRequest));
+
+        // when
+        QuizSubmitResponse quizSubmitResponse = quizFacadeService.submitQuiz(quizzesSubmitRequest);
+
+        // then
+        Assertions.assertAll(
+                () -> assertThat(quizSubmitResponse.totalQuizCount()).isOne(),
+                () -> assertThat(quizSubmitResponse.correctCount()).isOne()
+        );
     }
 }
